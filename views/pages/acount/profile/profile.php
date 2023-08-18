@@ -248,15 +248,15 @@ if($store->status == 200){
             <!-- Modal body -->
             <div class="modal-body">
                 <form class="ps-form--account ps-tab-root needs-validation" novalidate method="post">
-                <input type="hidden" value="<?php echo CurlController::api();?>" id="urlApi">
-                <input type="hidden" value="<?php 
-                 if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
-                    $url = "https://"; 
-                  }else{
-                    $url = "http://"; 
-                  }
-                  echo $url . $_SERVER['HTTP_HOST']."/";
-                ?>" id="urlLocal">
+                    <input type="hidden" value="<?php echo CurlController::api();?>" id="urlApi">
+                    <input type="hidden" value="<?php 
+                    if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                        $url = "https://"; 
+                    }else{
+                        $url = "http://"; 
+                    }
+                    echo $url . $_SERVER['HTTP_HOST']."/";
+                    ?>" id="urlLocal">
                     <!-- Product -->
                     <div class="form-group">
                         <label>Producto<sup class="text-danger">*</sup></label>
@@ -276,16 +276,18 @@ if($store->status == 200){
                             required>
                                 <option value="">Seleccionar producto</option>
                                 <?php foreach($produts as $key => $value):?>
-                                    <option value="<?php echo $value->id_category."_".$value->id_product."_".$value->name_product; ?>"><?php echo $value->name_product; ?></option>
+                                    <option class="Selectedit" value="<?php echo $value->id_category."_".$value->id_product."_".$value->name_product; ?>"><?php echo $value->name_product; ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <div class="valid-feedback"></div>
                             <div class="invalid-feedback">El nombre es requerido</div>
                         </div>
-                        <figure id="imageProduct">
+                        <figure id="imageProduct" class="imageProduct">
                         </figure>
-                        <div id="stokeorderProduct" ></div>
-                        <input type="hidden" name="stockApro" id="stockApro">
+                        <div id="stokeorderProduct" class="stokeorderProduct"></div>
+                        <input type="hidden" name="stockApro" id="stockApro" class="stockApro">
+                        <input type="hidden" class="idTalla" >
+                    <input type="hidden" class="idColor" >
                     </div>
                     <div class="form-group">
                         <label>ESPESIFICACIONES ORDEN<sup class="text-danger">*</sup></label>
@@ -300,6 +302,7 @@ if($store->status == 200){
                                 <select 
                                 class="form-control"
                                 name="ColorProduct"
+                                onchange="changeColor(event)"
                                 required>
                                 <option value="">Select Color</option>
                                 </select>
@@ -316,7 +319,7 @@ if($store->status == 200){
                                 <select 
                                 class="form-control"
                                 name="TallaProduct"
-                                onchange="changeTalla(event)"
+                                onclick="changeTalla(event)"
                                 required>
                                 <option value="">Select Talla</option>
                                 </select>

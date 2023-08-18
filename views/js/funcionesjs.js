@@ -558,6 +558,114 @@ function statusConfirm(numStock,idStock,idOrder, statusorder,urlApi) {
   }
 }
 
+function statusConfirmRegister(outStockOrder,numStock,idStock,idOrder, statusorder,urlApi) {
+  if(statusorder == "Cancelado"){
+    switAlert("confirm", "Esta seguro de Cancelar la orden?", null, null, null).then(resp => {
+      if (resp == true) {
+        // revisar que el token coincida con la bd
+        let token = localStorage.getItem("token_user");
+        let settings = {
+          "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
+          "method": "PUT",
+          "timeaot": 0,
+          "headers": {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          "data": {
+            "status_order": statusorder,
+          },
+        };
+        $.ajax(settings).done(function (response) {
+              if (response.status == 200) {
+                if(outStockOrder == 1){
+                  let settings2 = {
+                    "url": urlApi + "stocks?id=" + idStock + "&nameId=id_stock&token=" + token,
+                    "method": "PUT",
+                    "timeaot": 0,
+                    "headers": {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    "data": {
+                      "number_stock": numStock+1,
+                    },
+                  };
+                  $.ajax(settings2).done(function (response) {
+                    if (response.status == 200) {
+                      switAlert("success", "La orden se cancelo correctamente y se actualizo el stock", null, null, 1500);
+                      window.location = $("#url").val()+"acount&registers";   
+                    }else{
+                      switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+                    }
+                  });
+                }else if(outStockOrder == 0){
+                  switAlert("success", "La orden se cancelo correctamente y no afecto el stock", null, null, 1500);
+                      window.location = $("#url").val()+"acount&registers";  
+                }
+              }else{
+                switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+              }
+        });
+      }
+    });
+  }else if(statusorder == "Confirmado" && outStockOrder==1){
+    switAlert("confirm", "Esta seguro de confirmar la orde/n?", null, null, null).then(resp => {
+      if (resp == true) {
+        // revisar que el token coincida con la bd    
+        let token = localStorage.getItem("token_user");
+        let settings = {
+          "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
+          "method": "PUT",
+          "timeaot": 0,
+          "headers": {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          "data": {
+            "status_order": statusorder,
+          },
+        };
+        $.ajax(settings).done(function (response) {
+          if (response.status == 200) {
+              switAlert("success", "La orden se confirmo correctamente pero no hay stock", null, null, 1500);
+              window.location = $("#url").val()+"acount&registers";
+          }else{
+            switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+          }
+        });
+      }
+    });
+  }else{
+    switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+  }
+}
+
+function plusStock(idOrder, urlApi){
+  switAlert("confirm", "Esta seguro de que ya hay stock?", null, null, null).then(resp => {
+    if (resp == true) {
+      // revisar que el token coincida con la bd
+      let token = localStorage.getItem("token_user");
+      let settings = {
+        "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
+        "method": "PUT",
+        "timeaot": 0,
+        "headers": {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        "data": {
+          "stock_out_order": 1,
+        },
+      };
+      $.ajax(settings).done(function (response) {
+            if (response.status == 200) {
+              switAlert("success", "La aprovado el stock", null, null, 1500);
+              window.location = $("#url").val()+"acount&registers";   
+            }else{
+              switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+            }
+      });
+    }
+  });
+}
+
 // funcion que remueve de bag
 function removeBagSC(urlProduct, urlPagina, idUser, numero,urlapi){
   switAlert("confirm", "Esta seguro de eliminar del carrito de compras?", urlPagina, null, null).then(resp => {
@@ -747,27 +855,44 @@ function changeContry(event){
   $(".dialCode").html(event.target.value.split("_")[1]);
 }
 
-function changeTalla(event){
-  $("#imgfunStock").remove();
-  $("#stfunStock").remove();
-  let idstock = event.target.value.split("_")[0];
+function changeTalla(event,idtallas){
+  $(".imgfunStock").remove();
+  $(".stfunStock").remove();
+  let idTalla = "";
+  if(event!==0){
+    idTalla = event.target.value.split("_")[1];
+  }else if(idtallas == undefined){
+    idTalla = $(".idTalla").val();
+  }else{
+    idTalla = idtallas;
+  }
+  $(".idTalla").val(idTalla);
+  let idproduct =   $(".Selectedit").val().split("_")[1];
+  let color =  $(".idColor").val();
+  
   let settings = {
-    "url": $("#urlApi").val()+"relations?rel=stocks,categories,products&type=stock,category,product&equalTo="+idstock+"&linkTo=id_stock&select=price_product_stock,number_stock,id_category_stock,url_category,image_stock",
+    "url": $("#urlApi").val()+"relations?rel=stocks,categories,products&type=stock,category,product&equalTo="+idproduct+","+color+","+idTalla+"&linkTo=id_product_stock,color_stock,size_stock&select=price_product_stock,number_stock,id_category_stock,url_category,image_stock",
     "method":"GET",
     "timeout":0,
   };
   $.ajax(settings).done(function(response){
-    
     $(".precioProduct").val(response.result[0].price_product_stock);
-    $("#imageProduct").append(`<img id="imgfunStock" src="img/products/`+response.result[0].url_category+`/stock/`+response.result[0].image_stock+`" alt="img" class="p-0 m-0 img-circle mw-50 mx-auto d-block">`);
+    $(".imageProduct").append(`<img src="img/products/`+response.result[0].url_category+`/stock/`+response.result[0].image_stock+`" alt="img" class="p-0 m-0 img-circle mw-50 mx-auto d-block imgfunStock">`);
     if(response.result[0].number_stock > 0){
-      $("#stokeorderProduct").append(`<p id="stfunStock" class="bg-success text-white text-center">Si hay en Stock</p>`);
-      $("#stockApro").val(1);
+      $(".stokeorderProduct").append(`<p class="bg-success text-white text-center stfunStock">Si hay en Stock</p>`);
+      $(".stockApro").val(1);
     }else{
-      $("#stokeorderProduct").append(`<p id="stfunStock" class="bg-danger text-white text-center">No hay en Stock. Se debe comprar</p>`);
-      $("#stockApro").val(0);
+      $(".stokeorderProduct").append(`<p class="bg-danger text-white text-center stfunStock">No hay en Stock. Se debe comprar</p>`);
+      $(".stockApro").val(0);
     }
   });
+}
+
+function changeColor(event){
+  let idColor = event.target.value.split("_")[1];
+  $(".idColor").val(idColor);
+  let idTalla = $(".idTalla").val().split("_")[1];
+  changeTalla(0,idTalla);
 }
 
 var metodpay= $('[name="payment-method"]').val()
@@ -1600,6 +1725,7 @@ function changeLinea(event){
               $(limpiar[i]).remove();
             });
             item.estaciones.forEach(item2 =>{
+                $('[name="Estacionedit"]').append(`<option class="optEstation" value="`+item2._id.v+`_`+item2.nombre+`">`+item2.nombre+`</option>`);
                 $('[name="EstacionProduct"]').append(`<option class="optEstation" value="`+item2._id.v+`_`+item2.nombre+`">`+item2.nombre+`</option>`);
               });
         }
@@ -1637,11 +1763,12 @@ function changeProduct(event){
       hash[current.size_stock] = true;
       return exists;
     });
-
     response1.forEach(item =>{
+      $('[name="Coloredit"]').append(`<option class="optproductColor" value="`+item.id_stock+`_`+item.color_stock+`">`+item.color_stock+`</option>`);
       $('[name="ColorProduct"]').append(`<option class="optproductColor" value="`+item.id_stock+`_`+item.color_stock+`">`+item.color_stock+`</option>`);
     });
     response2.forEach(item =>{
+      $('[name="Tallaedit"]').append(`<option class="optproductTalla" value="`+item.id_stock+`_`+item.size_stock+`">`+item.size_stock+`</option>`);
       $('[name="TallaProduct"]').append(`<option class="optproductTalla" value="`+item.id_stock+`_`+item.size_stock+`">`+item.size_stock+`</option>`);
     });
   });

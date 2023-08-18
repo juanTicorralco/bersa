@@ -1,0 +1,34 @@
+[
+    {
+        "nombreColor":"rojo",
+        "HexaColor":"#FF0000"
+    },
+    {
+        "nombreColor":"negro",
+        "HexaColor":"#000000"
+    },
+    {
+        "nombreColor":"verde",
+        "HexaColor":"#00E203"
+    },
+    {
+        "nombreColor":"naranja",
+        "HexaColor":"#FF8700"
+    },
+    {
+        "nombreColor":"azul",
+        "HexaColor":"#000CFF"
+    },
+    {
+        "nombreColor":"cafe",
+        "HexaColor":"#BD6A31"
+    },
+    {
+        "nombreColor":"vino",
+        "HexaColor":"#C42929"
+    },
+    {
+        "nombreColor":"blanco",
+        "HexaColor":"#FFFFFF"
+    }
+]

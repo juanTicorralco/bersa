@@ -718,6 +718,7 @@ class ControllerUser
             }
         }
     }
+
     public function endcheck($idUser, $idProduct, $numero){
         $cont=0; 
         $idUser = $idUser; 
@@ -778,6 +779,7 @@ class ControllerUser
             return 1;
         }
     }
+
     public function newsemail(){
         if(isset($_POST["emailnewes"])){
             if( preg_match('/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/', $_POST["emailnewes"])){
@@ -823,6 +825,7 @@ class ControllerUser
             }
         }
     }
+
     public function AgregarNewRegister(){
         if(isset($_POST["SelectProduct"])){
             if(
@@ -949,56 +952,172 @@ class ControllerUser
             }
         }
     }
-    // public function statusFinal($idOrder){
-    //     if(isset($_POST["statusOrder"])){
-    //         if($_POST["statusOrder"] == "Finalizado"){
-    //             $url = CurlController::api()."orders?id=".$idOrder."&nameId=id_order&token=".$_SESSION["user"]->token_user;
-    //             $method = "PUT";
-    //             $fields = "status_order=".$_POST["statusOrder"];
-    //             $headers = array();
+    
+    public function editRegister(){
+        if(isset($_POST["Selectedit"])){
+            if(
+                preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["Selectedit"]) &&
+                isset($_POST["Coloredit"]) && preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["Coloredit"]) &&
+                isset($_POST["Tallaedit"]) && preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["Tallaedit"]) &&
+                isset($_POST["Pesoedit"]) && preg_match('/^[-\\(\\)\\0-9 ]{1,}$/', $_POST["Pesoedit"]) &&
+                isset($_POST["Alturaedit"]) && preg_match('/^[-\\(\\)\\0-9 ]{1,}$/', $_POST["Alturaedit"]) &&
+                isset($_POST["precioedit"]) && preg_match('/^[-\\(\\)\\0-9 ]{1,}$/', $_POST["precioedit"]) &&
+                isset($_POST["pagoPrevedit"]) && preg_match('/^[-\\(\\)\\0-9 ]{1,}$/', $_POST["pagoPrevedit"]) &&
+                isset($_POST["diaedit"]) && preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["diaedit"]) &&
+                isset($_POST["horaedit"]) && preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["horaedit"]) &&
+                isset($_POST["SelectLinea"]) && preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["SelectLinea"]) &&
+                isset($_POST["Estacionedit"]) && preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["Estacionedit"]) &&
+                isset($_POST["nombreedit"]) && preg_match('/^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ ]{1,}$/', $_POST["nombreedit"]) &&
+                isset($_POST["telefonoedit"]) && preg_match('/^[-\\(\\)\\0-9 ]{1,}$/', $_POST["telefonoedit"]) &&
+                isset($_POST["messengeredit"]) && preg_match('/^[-\\(\\)\\0-9 ]{1,}$/', $_POST["messengeredit"]) &&
+                isset($_POST["stockApro"]) && preg_match('/^[-\\(\\)\\0-9 ]{1,}$/', $_POST["stockApro"]) &&
+                isset($_POST["idOrderUP"]) 
+            ){
+                $color =  explode("_", $_POST["Coloredit"])[1];
+                $talla =  explode("_", $_POST["Tallaedit"])[1];
+                $idProduct =  explode("_", $_POST["Selectedit"])[1];
+                $url = CurlController::api()."stocks?linkTo=id_product_stock,color_stock,size_stock&equalTo=".$idProduct.",".$color.",".$talla."&select=code_stock,id_stock,number_stock";
+                $method= "GET";
+                $header= array();
+                $fields= array();
+                $codeStock= CurlController::request($url, $method, $header, $fields);
+                if($codeStock->status == 200){
+                    $codeStocker = $codeStock->result[0]->code_stock;
+                    $id_stock = $codeStock->result[0]->id_stock;
+                    $NumStock = $codeStock->result[0]->number_stock;
+                }else{
+                    echo '
+                        <script>
+                            formatearAlertas();
+                            notiAlert(3, "Error: no hay Coincidencias de color y talla");
+                        </script>'; 
+                    return;
+                }
+                $envioOrder = 0;
+                if(isset($_POST["envioedit"]) &&  $_POST["envioedit"]== "on"){
+                    $envioOrder = 1;
+                }
+                $spesificationOrder = array( (object)[ "peso" => array($_POST["Pesoedit"]), "altura" => array($_POST["Alturaedit"])]);
 
-    //             $upStatusOrder = CurlController::request($url,$method,$fields,$headers);
-    //             if($upStatusOrder->status == 200){
-    //                 echo '
-    //                     <script>
-    //                         formatearAlertas();
-    //                         switAlert("success", "Orden finalizada", null, null, 1500);
-    //                     </script>'; 
-    //             }else{
-    //                 echo '
-    //                 <script>
-    //                     formatearAlertas();
-    //                     switAlert("error", "Ocurrio un error, intentalo de nuevo!", null, null, 1500);
-    //                 </script>'; 
-    //             }
-    //         }else if($_POST["statusOrder"] == "Cancelado"){
-    //             $url = CurlController::api()."orders?id=".$idOrder."&nameId=id_order&token=".$_SESSION["user"]->token_user;
-    //             $method = "PUT";
-    //             $fields = "status_order=".$_POST["statusOrder"];
-    //             $headers = array();
+                $dataStore ="id_product_order=".explode("_", $_POST["Selectedit"])[1]."&code_stock_order=".$codeStocker."&id_category_order=".explode("_", $_POST["Selectedit"])[0]."&id_stock_order=".$id_stock."&name_buyer_order=".TemplateController::capitalize($_POST["nombreedit"])."&phone_order=".$_POST["telefonoedit"]."&stacion_order=".explode("_", $_POST["Estacionedit"])[1]."&day_order=".$_POST["diaedit"]."&hour_order=".$_POST["horaedit"].":00"."&stock_out_order=".$_POST["stockApro"]."&spesifications_order=".json_encode($spesificationOrder)."&status_order="."Pendiente"."&price_order=".$_POST["precioedit"]."&pago_prev_order=".$_POST["pagoPrevedit"]."&follow_order=". $_POST["messengeredit"]."&envio_order=".$envioOrder;
 
-    //             $upStatusOrder = CurlController::request($url,$method,$fields,$headers);
-    //             if($upStatusOrder->status == 200){
-    //                 echo '
-    //                     <script>
-    //                         formatearAlertas();
-    //                         switAlert("success", "Orden finalizada", null, null, 1500);
-    //                     </script>'; 
-    //             }else{
-    //                 echo '
-    //                 <script>
-    //                     formatearAlertas();
-    //                     switAlert("error", "Ocurrio un error, intentalo de nuevo!", null, null, 1500);
-    //                 </script>'; 
-    //             }
-    //         }else{
-    //             echo '
-    //                 <script>
-    //                     formatearAlertas();
-    //                     notiAlert(3, "Error: El estatus no es correcto");
-    //                 </script>'; 
-    //             return;
-    //         }
-    //     }
-    // }
+                $url = CurlController::api()."orders?id=".$_POST["idOrderUP"]."&nameId=id_order&token=".$_SESSION["user"]->token_user;
+                $method = "PUT";
+                $fields = $dataStore;
+                $header = array(
+                "Content-Type" => "application/x-www-form-urlencoded"
+                );
+                $saveOrder = CurlController::request($url,$method,$fields,$header);
+
+                if($saveOrder->status == "200"){
+                    if($_POST["numOrderStock"] !== $codeStocker){
+                        if($NumStock > 0){
+                            $url = CurlController::api()."stocks?id=".$id_stock."&nameId=id_stock&token=".$_SESSION["user"]->token_user;
+                            $method = "PUT";
+                            $fields = "number_stock=".$NumStock-1;
+                            $headers = array();       
+                            $upStock = CurlController::request($url,$method,$fields,$headers);
+                            if($upStock->status == 200){
+                                if($_POST["stockAproOld"] == 1){
+                                    $url = CurlController::api()."stocks?id=".$_POST["numOrderStock"]."&nameId=code_stock&token=".$_SESSION["user"]->token_user;
+                                    $method = "PUT";
+                                    $fields = "number_stock=".$_POST["numberStockols"]+1;
+                                    $headers = array();
+                    
+                                    $upStock2 = CurlController::request($url,$method,$fields,$headers);
+                                    if($upStock2->status == 200){
+                                        echo '
+                                            <script>
+                                                formatearAlertas();
+                                                switAlert("success", "El registro se realizo correctamente con cambio en stock", "' . TemplateController::path().'acount&registers",1500);
+                                                window.location="' . TemplateController::path() . 'acount&registers";
+                                            </script>'; 
+                                        return;
+                                    }else{
+                                        echo '
+                                        <script>
+                                            formatearAlertas();
+                                            notiAlert(3, "Error: al guardar la orden");
+                                        </script>'; 
+                                        return;
+                                    }
+                                }else{
+                                    echo '
+                                        <script>
+                                            formatearAlertas();
+                                            switAlert("success", "El registro se realizo correctamente sin afectar el segundo stock", "' . TemplateController::path().'acount&registers",1500);
+                                            window.location="' . TemplateController::path() . 'acount&registers";
+                                        </script>'; 
+                                    return;
+                                }
+                            }else{
+                                echo '
+                                <script>
+                                    formatearAlertas();
+                                    notiAlert(3, "Error: al guardar la orden");
+                                </script>'; 
+                                return;
+                            }
+                        }else{
+                            if($_POST["stockAproOld"] == 1){
+                                $url = CurlController::api()."stocks?id=".$_POST["numOrderStock"]."&nameId=code_stock&token=".$_SESSION["user"]->token_user;
+                                $method = "PUT";
+                                $fields = "number_stock=".$_POST["numberStockols"]+1;
+                                $headers = array();
+                
+                                $upStock = CurlController::request($url,$method,$fields,$headers);
+                                if($upStock->status == 200){
+                                    echo '
+                                        <script>
+                                            formatearAlertas();
+                                            switAlert("success", "El registro se realizo correctamente con cambio en stock", "' . TemplateController::path().'acount&registers",1500);
+                                            window.location="' . TemplateController::path() . 'acount&registers";
+                                        </script>'; 
+                                    return;
+                                }else{
+                                    echo '
+                                    <script>
+                                        formatearAlertas();
+                                        notiAlert(3, "Error: al guardar la orden");
+                                    </script>'; 
+                                    return;
+                                }
+                            }else{
+                                echo '
+                                    <script>
+                                        formatearAlertas();
+                                        switAlert("success", "El registro se realizo correctamente sin afectar el segundo stock", "' . TemplateController::path().'acount&registers",1500);
+                                        window.location="' . TemplateController::path() . 'acount&registers";
+                                    </script>'; 
+                                return;
+                            }
+                        }   
+                    }else{
+                        print_r("hoes");
+                        echo '
+                        <script>
+                            formatearAlertas();
+                            switAlert("success", "Se edito correctamente sin cambio a stock", "' . TemplateController::path().'acount&registers",1500);
+                            window.location="' . TemplateController::path() . 'acount&registers";
+                        </script>'; 
+                        return;
+                    }   
+                }else{
+                    echo '
+                        <script>
+                            formatearAlertas();
+                            notiAlert(3, "Error: al guardar la orden");
+                        </script>'; 
+                    return;
+                }
+            }else{
+                echo '
+                    <script>
+                        formatearAlertas();
+                        notiAlert(3, "Error: en la sintaxis de los campos");
+                    </script>'; 
+                return;
+            }
+        }
+    }
 }
