@@ -867,8 +867,9 @@ function changeTalla(event,idtallas){
     idTalla = idtallas;
   }
   $(".idTalla").val(idTalla);
-  let idproduct =   $(".Selectedit").val().split("_")[1];
-  let color =  $(".idColor").val();
+  let idproduct =   $(".idColor").val().split("_")[0];
+  let color =  $(".idColor").val().split("_")[1];
+
   
   let settings = {
     "url": $("#urlApi").val()+"relations?rel=stocks,categories,products&type=stock,category,product&equalTo="+idproduct+","+color+","+idTalla+"&linkTo=id_product_stock,color_stock,size_stock&select=price_product_stock,number_stock,id_category_stock,url_category,image_stock",
@@ -889,10 +890,198 @@ function changeTalla(event,idtallas){
 }
 
 function changeColor(event){
-  let idColor = event.target.value.split("_")[1];
-  $(".idColor").val(idColor);
+  let color = event.target.value.split("_")[1];
+  let idColor = event.target.value.split("_")[0];
+  $(".idColor").val(idColor+'_'+color);
   let idTalla = $(".idTalla").val().split("_")[1];
   changeTalla(0,idTalla);
+}
+
+function ChangeColorNew(event){
+  let idColor = event.target.value.split("_")[0];
+  let hexaColor = event.target.value.split("_")[1];
+  let hexaText = event.target.value.split("_")[2];
+  let color = event.target.value.split("_")[3];
+  let valcolor = $(".valColor").val();
+  let countColor = parseInt($(".valCountColor").val());
+  if(color !== undefined){
+    $(".colorSpesific").append(`<div class="colorSection_`+idColor+`"><p> <span class="rounded p-2 border border-dark" style="background-color: `+hexaColor+`; color: `+hexaText+`;">`+color+`</span>   <button title="Cancelar" type="button" class="btn btn-danger rounded-circle mr-2" onclick="eliminarTC('colorSection_',`+idColor+`,'`+hexaText+`_`+hexaColor+`_`+color+`')"><i class='fa fa-trash'></i></button></p></div>`);
+    $(".valCountColor").val(countColor+1);
+    if(valcolor==""){
+      $(".valColor").val(hexaText+"_"+hexaColor+"_"+color);
+    }else{
+      $(".valColor").val(hexaText+"_"+hexaColor+"_"+color+","+valcolor);
+    }
+  }
+}
+
+function ChangeTallaNew2(event){
+  let idTalla = event.target.value.split("_")[0];
+  let talla = event.target.value.split("_")[1];
+  let valTalla = $(".valTalla").val();
+  let countTalla = parseInt($(".valCounTalla").val());
+  if(talla !== undefined){
+    $(".tallaSpesific").append(`<div class="tallaSection_`+idTalla+`"><p> <span class="rounded p-2 border border-dark text-dark">`+talla+`</span>   <button title="Cancelar" type="button" class="btn btn-danger rounded-circle mr-2" onclick="eliminarTC('tallaSection_',`+idTalla+`,'`+talla+`')"><i class='fa fa-trash'></i></button></p></div>`);
+    $(".valCounTalla").val(countTalla+1);
+    if(countTalla > 0 ){
+      $(".buttonStock").removeAttr("disabled");
+    }
+    if(valTalla==""){
+      $(".valTalla").val(talla);
+    }else{
+      $(".valTalla").val(talla+","+valTalla);
+    }
+  }
+}
+
+function ChangeTallaNew(event){
+  $(".selectTalla").show();
+  let nomTipo = event.target.value.split("_")[1];
+  let settings = {
+    "url": $("#urlLocal").val()+"views/json/tallas.json",
+    "method":"GET",
+    "timeout":0,
+  };
+  $.ajax(settings).done(function(response){
+    response.forEach((item,index) =>{
+      if(item.nombreT){
+        if(nomTipo == item.nombreT){
+          let limpiar= $(".optTalla");
+            limpiar.each(i=>{
+              $(limpiar[i]).remove();
+          });
+          item.valores.forEach(item2 =>{
+            $('[name="selectTalla"]').append(`<option class="optTalla" value="`+item2.idTalla+`_`+item2.nomTalla+`">`+item2.nomTalla+`</option>`);
+            $('[name="EstacionProduct"]').append(`<option class="optTalla" value="`+item2.idTalla+`_`+item2.nomTalla+`">`+item2.nomTalla+`</option>`);
+          });
+        }
+      }
+    })
+  });
+}
+
+function eliminarTC(nombre, id, tipo){
+  let nuevoValor="";
+  if(nombre == "colorSection_"){
+    let valcolor = $(".valColor").val().split(",");
+    let mayorQueDiez = valcolor.filter(element => element != tipo);
+    let countColor = mayorQueDiez.length+1;
+
+    mayorQueDiez.forEach(i => {
+      nuevoValor +=i+",";
+    });
+    nuevoValor=nuevoValor.substring(0, nuevoValor.length - 1);
+    $("."+nombre+id).remove();
+    if(countColor <= 1 ){
+      $(".buttonStock").attr('disabled', 'disabled');
+    }
+    if(countColor > 0){
+      $(".valCountColor").val(countColor-1);
+      $(".valColor").val(nuevoValor);
+
+    }else{
+      switAlert("error", "Ya no se puede eliminar por que ya no hay nada", null,null,null );
+    }
+  }else if(nombre == "tallaSection_"){
+    let valTalla = $(".valTalla").val().split(",");
+    let mayorQueDiez = valTalla.filter(element => element != tipo);
+    let valCounTalla = mayorQueDiez.length+1;
+
+    mayorQueDiez.forEach(i => {
+      nuevoValor +=i+",";
+    });
+    nuevoValor=nuevoValor.substring(0, nuevoValor.length - 1);
+    $("."+nombre+id).remove();
+
+    if(valCounTalla <= 1 ){
+      $(".buttonStock").attr('disabled', 'disabled');
+    }
+    if(valCounTalla > 0){
+      $(".valCounTalla").val(valCounTalla-1);
+      $(".valTalla").val(nuevoValor);
+
+    }else{
+      switAlert("error", "Ya no se puede eliminar por que ya no hay nada", null,null,null );
+    }
+  }
+}
+
+function addStock(){
+  $(".selectStock").show();
+  let color = $(".valColor").val().split(",");
+  let talla = $(".valTalla").val().split(",");
+  let colorF, count=1;
+ 
+  color.forEach(item =>{
+    colorF = item.split("_");
+    talla.forEach(tallaF=>{
+      $('.selectStock').append(`
+      <div></div>
+        <label>Color: <span class="rounded p-2 border border-dark" style="background-color: `+colorF[1]+`; color: `+colorF[0]+`;">`+colorF[2]+`</span> Talla: <span class="rounded p-2 border border-dark text-dark">`+tallaF+`</span><sup class="text-danger">*</sup></label>
+        <div class="row">
+              <!-- Telefono -->
+              <div class="col-12 col-lg-6 form-group__content input-group mx-0 pr-0 mb-3">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        Stock:
+                    </span>
+                </div>
+                <input 
+                type="text"
+                class="form-control"
+                placeholder="N° Stock"
+                name="s_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
+                required
+                pattern = '[-\\(\\)\\0-9 ]{1,}'
+                onchange="validatejs(event, 'phone')">
+                <div class="valid-feedback"></div>
+                <div class="invalid-feedback">Acompleta el campo</div>
+            </div>
+            <!-- Messenguer -->
+            <div class="col-12 col-lg-6 form-group__content input-group mx-0 pr-0 mb-3">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        Precio:
+                    </span>
+                </div>
+                <input 
+                type="text"
+                class="form-control"
+                placeholder="$ Precio"
+                name="p_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
+                required
+                pattern = '[.\\,\\0-9]{1,}'
+                onchange="validatejs(event, 'numbers')">
+                <div class="valid-feedback"></div>
+                <div class="invalid-feedback">Acompleta el campo</div>
+            </div>
+            <div class="form-group">
+                <label>Imagen Principal Product<sup class="text-danger">*</sup></label>
+                <div class="form-group__content">
+                    <label class="pb-5" for="`+count+`logoProduct">
+                        <img src="img/products/default/default-image.jpg" class="img-fluid `+count+`changeProduct" style="width:150px;">
+                    </label>
+                    <div class="custom-file">
+                        <input 
+                        type="file"
+                        id="`+count+`logoProduct"
+                        class="custom-file-input"
+                        name="l_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
+                        accept="image/*"
+                        maxSize="2000000"
+                        onchange="validateImageJs(event,'`+count+`changeProduct')"
+                        required>
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">El logo es requerida</div>
+                        <label for="logoProduct" class="custom-file-label">Subir</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+      `);
+    count++;
+    });
+  });
 }
 
 var metodpay= $('[name="payment-method"]').val()
@@ -1737,7 +1926,7 @@ function changeLinea(event){
 function changeProduct(event){
   $(".ColorProduct").show();
   $(".TallaProduct").show();
-  let idproduct = event.target.value.split("_")[0];
+  let idproduct = event.target.value.split("_")[1];
   let settings = {
     "url": $("#urlApi").val()+"stocks?equalTo="+idproduct+"&linkTo=id_product_stock&select=id_stock,color_stock,size_stock,color_hexa_stock",
     "method":"GET",
@@ -1764,12 +1953,12 @@ function changeProduct(event){
       return exists;
     });
     response1.forEach(item =>{
-      $('[name="Coloredit"]').append(`<option class="optproductColor" value="`+item.id_stock+`_`+item.color_stock+`">`+item.color_stock+`</option>`);
-      $('[name="ColorProduct"]').append(`<option class="optproductColor" value="`+item.id_stock+`_`+item.color_stock+`">`+item.color_stock+`</option>`);
+      $('[name="Coloredit"]').append(`<option class="optproductColor" value="`+idproduct+`_`+item.color_stock+`">`+item.color_stock+`</option>`);
+      $('[name="ColorProduct"]').append(`<option class="optproductColor" value="`+idproduct+`_`+item.color_stock+`">`+item.color_stock+`</option>`);
     });
     response2.forEach(item =>{
-      $('[name="Tallaedit"]').append(`<option class="optproductTalla" value="`+item.id_stock+`_`+item.size_stock+`">`+item.size_stock+`</option>`);
-      $('[name="TallaProduct"]').append(`<option class="optproductTalla" value="`+item.id_stock+`_`+item.size_stock+`">`+item.size_stock+`</option>`);
+      $('[name="Tallaedit"]').append(`<option class="optproductTalla" value="`+idproduct+`_`+item.size_stock+`">`+item.size_stock+`</option>`);
+      $('[name="TallaProduct"]').append(`<option class="optproductTalla" value="`+idproduct+`_`+item.size_stock+`">`+item.size_stock+`</option>`);
     });
   });
 }

@@ -1,34 +1,58 @@
 [
     {
+        "idColor":1,
         "nombreColor":"rojo",
-        "HexaColor":"#FF0000"
+        "HexaColor":"#FF0000",
+        "hexaText":"#FFFFFF"
     },
     {
+        "idColor":2,
         "nombreColor":"negro",
-        "HexaColor":"#000000"
+        "HexaColor":"#000000",
+        "hexaText":"#FFFFFF"
     },
     {
+        "idColor":3,
         "nombreColor":"verde",
-        "HexaColor":"#00E203"
+        "HexaColor":"#00E203",
+        "hexaText":"#FFFFFF"
+
     },
     {
+        "idColor":4,
         "nombreColor":"naranja",
-        "HexaColor":"#FF8700"
+        "HexaColor":"#FF8700",
+        "hexaText":"#FFFFFF"
+
     },
     {
+        "idColor":5,
         "nombreColor":"azul",
-        "HexaColor":"#000CFF"
+        "HexaColor":"#000CFF",
+        "hexaText":"#FFFFFF"
     },
     {
+        "idColor":6,
         "nombreColor":"cafe",
-        "HexaColor":"#BD6A31"
+        "HexaColor":"#BD6A31",
+        "hexaText":"#FFFFFF"
     },
     {
+        "idColor":7,
         "nombreColor":"vino",
-        "HexaColor":"#C42929"
+        "HexaColor":"#C42929",
+        "hexaText":"#FFFFFF"
     },
     {
+        "idColor":8,
         "nombreColor":"blanco",
-        "HexaColor":"#FFFFFF"
+        "HexaColor":"#FFFFFF",
+        "hexaText":"#000000"
+    },
+    {
+        "idColor":9,
+        "nombreColor":"gris",
+        "HexaColor":"#9B9B9B",
+        "hexaText":"#FFFFFF"
     }
 ]

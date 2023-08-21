@@ -1,0 +1,169 @@
+[
+    {
+       "id" : 1,
+       "nombreT" : "ropa",
+       "valores" : [ {
+                        "idTalla":1,
+                        "nomTalla":"CH",
+                        "tamTalla":"50-60",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":2,
+                        "nomTalla":"M",
+                        "tamTalla":"60-70",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":3,
+                        "nomTalla":"G",
+                        "tamTalla":"",
+                        "altTalla": "70-80"
+                    },
+                    {
+                        "idTalla":4,
+                        "nomTalla":"XL",
+                        "tamTalla":"",
+                        "altTalla": "80-90"
+                    },
+                    {
+                        "idTalla":5,
+                        "nomTalla":"JUMBO",
+                        "tamTalla":"90-100",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":6,
+                        "nomTalla":"ESPECIAL",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":7,
+                        "nomTalla":"2XL",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":8,
+                        "nomTalla":"3XL",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":9,
+                        "nomTalla":"4XL",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":10,
+                        "nomTalla":"5XL",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":11,
+                        "nomTalla":"6XL",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    }
+                ]
+    },
+    {
+        "id" : 2,
+        "nombreT" : "Zapatos", 
+        "valores" : [ {
+                         "idTalla":1,
+                         "nomTalla":"3",
+                         "tamTalla":"50-60",
+                         "altTalla": ""
+                     },
+                     {
+                         "idTalla":2,
+                         "nomTalla":"3.5",
+                         "tamTalla":"60-70",
+                         "altTalla": ""
+                     },
+                     {
+                         "idTalla":3,
+                         "nomTalla":"4",
+                         "tamTalla":"",
+                         "altTalla": "70-80"
+                     },
+                     {
+                         "idTalla":4,
+                         "nomTalla":"4.5",
+                         "tamTalla":"",
+                         "altTalla": "80-90"
+                     },
+                     {
+                         "idTalla":5,
+                         "nomTalla":"5",
+                         "tamTalla":"90-100",
+                         "altTalla": ""
+                     },
+                     {
+                         "idTalla":6,
+                         "nomTalla":"5.5",
+                         "tamTalla":"100-110",
+                         "altTalla": ""
+                     },
+                     {
+                        "idTalla":7,
+                        "nomTalla":"6",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":8,
+                        "nomTalla":"6.5",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":9,
+                        "nomTalla":"7",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":10,
+                        "nomTalla":"7.5",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":11,
+                        "nomTalla":"8",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":12,
+                        "nomTalla":"8.5",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":13,
+                        "nomTalla":"9",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":14,
+                        "nomTalla":"9.5",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    },
+                    {
+                        "idTalla":15,
+                        "nomTalla":"10",
+                        "tamTalla":"100-110",
+                        "altTalla": ""
+                    }
+
+                 ]
+     }
+]

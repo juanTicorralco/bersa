@@ -14,7 +14,7 @@ if (!isset($_SESSION['user'])) {
     return;
     }else{
         // traer la lista de deseos
-        $select="id_order,url_product,pago_prev_order,url_category,image_product,hour_order,name_product,name_buyer_order,phone_order,stacion_order,day_order,spesifications_order,status_order,price_order,follow_order,name_product,color_stock,size_stock,color_hexa_stock,id_stock_order,number_stock";
+        $select="id_order,url_product,pago_prev_order,url_category,image_product,hour_order,name_product,name_buyer_order,phone_order,stacion_order,day_order,spesifications_order,status_order,price_order,follow_order,name_product,color_stock,size_stock,color_hexa_stock,id_stock_order,number_stock,image_stock";
         $products= array();
         date_default_timezone_set('UTC');
         date_default_timezone_set("America/Mexico_City");
@@ -98,7 +98,7 @@ My Account Content
                                         <div class="ps-product--cart">
                                             <div class="ps-product__thumbnail">
                                                 <a href="<?php echo $path . $value->url_product; ?>">
-                                                    <img src="img/products/<?php echo $value->url_category; ?>/<?php echo $value->image_product; ?>" alt="<?php echo $value->name_product; ?>">
+                                                    <img src="img/products/<?php echo $value->url_category; ?>/stock/<?php echo $value->image_stock; ?>" alt="<?php echo $value->name_product; ?>">
                                                 </a>
                                             </div>
                                         </div>
