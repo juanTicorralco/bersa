@@ -61,26 +61,24 @@ My Account Content
             ======================================-->
             <div class="ps-section__content">
                 <ul class="ps-section__links">
-                    <?php if($_SESSION["user"]->method_user == "direct"): ?>
+                    <?php if($_SESSION["user"]->method_user == "globalAdminister"): ?>
                     <li><a href="<?php echo $path; ?>acount&orders">Ordenes</a></li>
                     <li><a href="<?php echo $path; ?>acount&registers">Registros</a></li>
                     <li class="active"><a href="<?php echo $path; ?>acount&inventario">Inventario</a></li>
-                    <li><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
-                    <li><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
+                    <li><a href="<?php echo $path; ?>acount&ventas">Ventas</a></li>
+                    <!-- <li><a href="<?php //echo $path; ?>acount&wishAcount">My Wishlist</a></li>
+                    <li><a href="<?php //echo $path; ?>acount&my-shopping">My Shopping</a></li> -->
                     <?php endif; ?>
-                    <?php if($_SESSION["user"]->method_user == "administer"): ?>
-                    <li ><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
-                    <li><a href="<?php echo $path; ?>acount&list-vendor">Lista vendidos</a></li>
-                    <?php endif; ?>
-                    <?php if($_SESSION["user"]->method_user == "globalAdminister"): ?>
-                    <li><a href="<?php echo $path; ?>acount&my-store">My Store</a></li>
-                    <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li>
-                    <?php endif; ?>
+                    <?php //if($_SESSION["user"]->method_user == "administer"): ?>
+                    <!-- <li ><a href="<?php //echo $path; ?>acount&my-shopping">My Shopping</a></li> -->
+                    <!-- <li><a href="<?php //echo $path; ?>acount&list-vendor">Lista vendidos</a></li> -->
+                    <?php //endif; ?>
+                    <?php //if($_SESSION["user"]->method_user == "globalAdminister"): ?>
+                    <!-- <li><a href="<?php //echo $path; ?>acount&my-store">My Store</a></li> -->
+                    <!-- <li><a href="<?php //echo $path; ?>acount&my-sales">My Sales</a></li> -->
+                    <?php //endif; ?>
                 </ul>
-
-                <?php if(isset($_GET["create"])): ?>
-                    <?php include_once("modules/invCreate.php"); ?>
-                <?php elseif(isset($_GET["edit"])): ?>
+                <?php if(isset($_GET["edit"])): ?>
                     <?php include_once("modules/invEdit.php"); ?>
                 <?php elseif(isset($_GET["view"])): ?>
                     <?php include_once("modules/invView.php"); ?>
@@ -120,7 +118,7 @@ My Account Content
                                          }
                                     ?>
                                     <td>
-                                        <div class="ps-product--cart">
+                                        <div class="ps-product--cart justify-content-center">
                                             <div class="ps-product__thumbnail">
                                                 <a>
                                                     <img src="img/products/<?php echo $value->url_category; ?>/<?php echo $value->image_product; ?>" alt="<?php echo $value->name_product; ?>">
@@ -158,7 +156,7 @@ My Account Content
                                     <td>
                                         <!-- <a target="_blank" class="btn btn-success rounded-circle mr-2"><i class='fa  fa-check-square'></i></a> -->
                                         <a href="<?php echo TemplateController::path();?>acount&inventario?view=<?php echo $value->id_product;?>" class="btn btn-dark text-white rounded-circle mr-2"><i class='fa fa-eye'></i></a>
-                                        <a target="_blank" class="btn btn-info text-white rounded-circle mr-2"><i class='fa fa-pencil-alt'></i></a>
+                                        <a href="<?php echo TemplateController::path();?>acount&inventario?edit=<?php echo $value->id_product;?>" class="btn btn-info text-white rounded-circle mr-2"><i class='fa fa-pencil-alt'></i></a>
                                         <a target="_blank" class="btn btn-danger text-white rounded-circle mr-2"><i class='fa fa-trash'></i></a>
                                     </td>
                                     <td><div class="ps-product__content">

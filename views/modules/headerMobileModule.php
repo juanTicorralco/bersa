@@ -241,20 +241,20 @@
                 <!--=====================================
                 Login and Register dentro
                 ======================================-->
-                <?php if (isset($_SESSION["user"])) : ?>
+                <?php if (isset($_SESSION["user"])) :?>
                     <div class="ps-cart--mini">
                       		<?php if ($_SESSION["user"]->method_user == "direct" || $_SESSION["user"]->method_user == "administer" || $_SESSION["user"]->method_user == "globalAdminister") : ?>
-                                <?php if ($_SESSION["user"]->picture_user == "" || $_SESSION["user"]->picture_user == "NULL") : ?>
+                                <?php if ($_SESSION["user"]->image_user == "" || $_SESSION["user"]->image_user == "NULL") : ?>
                                     <img class="rounded-circle" style="max-width: 40px;" src="img/users/default/default.png" alt="<?php echo $_SESSION["user"]->name_user; ?>">
                                 <?php else : ?>
-                                    <img class="rounded-circle" style="max-width: 40px;" src="img/users/<?php echo $_SESSION["user"]->id_user; ?>/<?php echo $_SESSION["user"]->picture_user; ?>" alt="<?php echo $_SESSION["user"]->username_user; ?>">
+                                    <img class="rounded-circle" style="max-width: 40px;" src="img/users/<?php echo $_SESSION["user"]->id_user; ?>/<?php echo $_SESSION["user"]->image_user; ?>" alt="<?php echo $_SESSION["user"]->name_user; ?>">
                                 <?php endif; ?>
                             <?php endif; ?>
                         <div class="ps-cart__content slidernew" style="max-width: 250px !important; right: 0 !important;">
                                 <div class="ps-cart__items" id="bagTok">
 								     <div class="ps-product--cart-mobile">
                                             <div class="ps-product__content m-0"> 
-                                               <p>Cuenta: <a class="m-0" href="<?php echo $path; if ($_SESSION['user']->method_user == 'direct')echo 'acount&wishAcount';if ($_SESSION['user']->method_user == 'administer')echo 'acount&list-vendor';if ($_SESSION['user']->method_user == 'globalAdminister')echo 'acount&my-store';?>"><?php echo $_SESSION["user"]->displayname_user; ?></a></p>
+                                               <p>Cuenta: <a class="m-0" href="<?php echo $path; if ($_SESSION['user']->method_user == 'direct')echo 'acount&wishAcount';if ($_SESSION['user']->method_user == 'administer')echo 'acount&list-vendor';if ($_SESSION['user']->method_user == 'globalAdminister')echo 'acount&my-store';?>"><?php echo $_SESSION["user"]->name_user; ?></a></p>
                             					<p>Logout: <a class="m-0" href="<?php echo $path ?>acount&logout">Salir</a></p>
                                             </div>
                                         </div>          

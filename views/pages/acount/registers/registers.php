@@ -44,8 +44,6 @@ if (!isset($_SESSION['user'])) {
             }
         }
     }
-    //  echo '<pre>'; print_r($products); echo '</pre>'; 
-    //                                      return;
 }
 ?>
 <!--=====================================
@@ -63,21 +61,23 @@ My Account Content
             ======================================-->
             <div class="ps-section__content">
                 <ul class="ps-section__links">
-                    <?php if($_SESSION["user"]->method_user == "direct"): ?>
+                    <?php if($_SESSION["user"]->method_user == "globalAdminister"): ?>
                     <li><a href="<?php echo $path; ?>acount&orders">Ordenes</a></li>
                     <li class="active"><a href="<?php echo $path; ?>acount&registers">Registros</a></li>
                     <li><a href="<?php echo $path; ?>acount&inventario">Inventario</a></li>
-                    <li><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
-                    <li><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
+                    <li><a href="<?php echo $path; ?>acount&ventas">Ventas</a></li>
+
+                    <!-- <li><a href="<?php //echo $path; ?>acount&wishAcount">My Wishlist</a></li>
+                    <li><a href="<?php //echo $path; ?>acount&my-shopping">My Shopping</a></li> -->
                     <?php endif; ?>
-                    <?php if($_SESSION["user"]->method_user == "administer"): ?>
-                    <li ><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
-                    <li><a href="<?php echo $path; ?>acount&list-vendor">Lista vendidos</a></li>
-                    <?php endif; ?>
-                    <?php if($_SESSION["user"]->method_user == "globalAdminister"): ?>
-                    <li><a href="<?php echo $path; ?>acount&my-store">My Store</a></li>
-                    <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li>
-                    <?php endif; ?>
+                    <?php //if($_SESSION["user"]->method_user == "administer"): ?>
+                    <!-- <li ><a href="<?php //echo $path; ?>acount&my-shopping">My Shopping</a></li> -->
+                    <!-- <li><a href="<?php //echo $path; ?>acount&list-vendor">Lista vendidos</a></li> -->
+                    <?php //endif; ?>
+                    <?php //if($_SESSION["user"]->method_user == "globalAdminister"): ?>
+                    <!-- <li><a href="<?php //echo $path; ?>acount&my-store">My Store</a></li> -->
+                    <!-- <li><a href="<?php //echo $path; ?>acount&my-sales">My Sales</a></li> -->
+                    <?php //endif; ?>
                 </ul>
                 <?php if(isset($_GET["Editar"]) && is_numeric($_GET["Editar"])):?>
                     <?php  include_once("modules/editRegister.php"); ?>
@@ -124,7 +124,7 @@ My Account Content
                                             }
                                         ?>
                                         <td class="bg-<?php echo $colorStock; ?>">
-                                            <div class="ps-product--cart">
+                                            <div class="ps-product--cart justify-content-center">
                                                 <div class="ps-product__thumbnail">
                                                     <a href="<?php echo $path . $value->url_product; ?>">
                                                         <img src="img/products/<?php echo $value->url_category; ?>/stock/<?php echo $value->image_stock; ?>" alt="<?php echo $value->name_product; ?>">

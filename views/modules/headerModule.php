@@ -20,16 +20,16 @@ if (isset($_SESSION["user"])) {
 <header class="header header--standard header--market-place-4" data-sticky="true">
 
     <!--=====================================
-Header TOP
-======================================-->
+    Header TOP
+    ======================================-->
 
     <div class="header__top">
 
         <div class="container">
 
             <!--=====================================
-        Social 
-        ======================================-->
+            Social 
+            ======================================-->
 
             <div class="header__left">
                 <ul class="d-flex justify-content-center">
@@ -41,8 +41,8 @@ Header TOP
             </div>
 
             <!--=====================================
-        Contact & lenguage 
-        ======================================-->
+            Contact & lenguage 
+            ======================================-->
 
             <div class="header__right">
                 <ul class="header__top-links">

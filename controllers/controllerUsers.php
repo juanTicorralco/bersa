@@ -110,15 +110,14 @@ class ControllerUser
                         if(isset($_COOKIE["UrlPage"])){
                             $urlsVist = $_COOKIE["UrlPage"];
                         }else{
-                            $urlsVist =  TemplateController::path() . 'acount&wishAcount';
-                            if ($_SESSION['user']->method_user == 'direct'){
-                                $urlsVist =  TemplateController::path() . 'acount&wishAcount';
-                            }
-                            if ($_SESSION['user']->method_user == 'administer'){
+                            if($_SESSION['user']->method_user == 'delivery'){
+                                $urlsVist =  TemplateController::path() . 'acount&orders';
+                            }else if ($_SESSION['user']->method_user == 'administer'){
                                 $urlsVist =  TemplateController::path() . 'acount&list-vendor';
-                            }
-                            if ($_SESSION['user']->method_user == 'globalAdminister'){
-                                $urlsVist =  TemplateController::path() . 'acount&my-store';
+                            }else if ($_SESSION['user']->method_user == 'globalAdminister'){
+                                $urlsVist =  TemplateController::path() . 'acount&registers';
+                            }else{
+                                $urlsVist =  TemplateController::path() . 'acount&wishAcount';
                             }
                         }
                         echo '
@@ -901,8 +900,6 @@ class ControllerUser
                 "Content-Type" => "application/x-www-form-urlencoded"
                 );
                 $saveOrder = CurlController::request($url,$method,$fields,$header);
-
-                print_r($saveOrder);
                 if($saveOrder->status == "200"){
                     if($NumStock > 0){
                         $url = CurlController::api()."stocks?id=".$id_stock."&nameId=id_stock&token=".$_SESSION["user"]->token_user;
@@ -1093,7 +1090,6 @@ class ControllerUser
                             }
                         }   
                     }else{
-                        print_r("hoes");
                         echo '
                         <script>
                             formatearAlertas();
@@ -1237,6 +1233,146 @@ class ControllerUser
                         formatearAlertas();
                         notiAlert(3, "Error: al guardar tienda");
                     </script>'; 
+                return;
+            }
+        }
+    }
+
+    public function AgregarTCMod($idProduct, $nameProd, $urlCat, $idCat){
+        if(isset($_POST["valCountColor"])){
+            $colores = explode(",", $_POST["valColor"]);
+            $tallas = explode(",", $_POST["valTalla"]);
+            foreach($colores as $key => $color){
+                $colorF = explode("_", $color);
+                foreach($tallas as $key2 => $talla){
+                    $name = '';
+                    $explode = explode(' ',TemplateController::capitalize( $nameProd));
+                    foreach($explode as $x){
+                        $name .=  $x[0];
+                    }
+                    date_default_timezone_set('UTC');
+                    date_default_timezone_set("America/Mexico_City");
+                    $dateCreated = date("Y-m-d");
+
+                    $codeStock = $idProduct . strtoupper($name) . $talla . strtoupper(substr($colorF[2], 0, ((strlen($colorF[2])* (-1))+3)));
+                    $image = $_FILES["l_".$colorF[1]."_".$colorF[2]."_".$talla];
+                    $folder = "img/products";
+                    $path = $urlCat."/stock";
+                    $width = 300;
+                    $heigth = 300;
+                    $name = $codeStock;
+
+                    $saveImageProduct = TemplateController::AlmacenPhoto($image, $folder, $path, $width, $heigth, $name);
+                    if($saveImageProduct == 'error'){
+                        echo '
+                            <script>
+                                formatearAlertas();
+                                notiAlert(3, "Error: al salvar la portada del producto");
+                            </script>'; 
+                        return;
+                    }
+                    $dataProduct = array(
+                        "id_product_stock" =>$idProduct,
+                        "id_category_stock"=> $idCat,
+                        "code_stock" => $codeStock,
+                        "image_stock" => $saveImageProduct,
+                        "size_stock" => $talla,
+                        "color_stock" => strtoupper($colorF[2]),
+                        "color_hexa_stock" => substr($colorF[1], -6),
+                        "number_stock" => $_POST["s_".$colorF[1]."_".$colorF[2]."_".$talla],
+                        "price_product_stock" => $_POST["p_".$colorF[1]."_".$colorF[2]."_".$talla],
+                        "date_create_stock" => $dateCreated
+                    );
+                    $url = CurlController::api()."stocks?token=".$_SESSION["user"]->token_user;
+                    $method = "POST";
+                    $fields = $dataProduct;
+                    $header = array(
+                    "Content-Type" => "application/x-www-form-urlencoded"
+                    );
+                    $saveStore = CurlController::request($url,$method,$fields,$header);
+                    if($saveStore->status == "200"){
+                        echo '
+                        <script>
+                            formatearAlertas();
+                            switAlert("success", "El registro se realizo correctamente", "' . TemplateController::path().'acount&inventario?edit='.$idProduct.'",1500);
+                        </script>'; 
+                    }
+                }
+            }
+        }
+    }
+
+    public function editInventario($idProduct){
+        if(isset($_POST["nameProductEdit"])){
+            if(
+                preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["nameProductEdit"]) &&
+                isset($_POST["urlProductEdit"]) && preg_match('/^[-\\(\\)\\=\\%\\&\\$\\;\\_\\*\\"\\#\\?\\¿\\!\\¡\\:\\.\\,\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]{1,10000}$/', $_POST["urlProductEdit"])
+            ){
+                // if(isset($_FILES["logoProduct"]["tmp_name"])&& !empty($_FILES["logoProduct"]["tmp_name"])){
+                //     $image = $_FILES['logoProduct'];
+                //     $folder = "img/products";
+                //     $path = explode("_", $_POST['categoryProduct'])[1];
+                //     $width = 300;
+                //     $heigth = 300;
+                //     $name = $_POST["urlProduct"];
+
+                //     $saveImagePortProduct = TemplateController::AlmacenPhoto($image, $folder, $path, $width, $heigth, $name);
+                //     if($saveImagePortProduct == 'error'){
+                //         echo '
+                //             <script>
+                //                 formatearAlertas();
+                //                 notiAlert(3, "Error: al salvar la portada del producto");
+                //             </script>'; 
+                //         return;
+                //     }
+                // }else{
+                //     $saveImagePortProduct = $_POST["imageProductOld"];
+                // }
+                $colores = explode(",", $_POST["valColor"]);
+                $colores = array_unique($colores);
+                $tallas = explode(",", $_POST["valTalla"]);
+                $tallas = array_unique($tallas);
+                foreach($colores as $key => $color){
+                    $colorF = explode("_", $color); 
+                    foreach($tallas as $key2 => $talla){
+                        $name = '';
+                        $explode = explode(' ',TemplateController::capitalize( $_POST["nameProductEdit"]));
+                        foreach($explode as $x){
+                            if($x ==! "" ){
+                                $name .=  $x[0];
+                            }
+                        }
+                        $codeStock = $idProduct . strtoupper($name) . $talla . strtoupper(substr($colorF[1], 0, ((strlen($colorF[1])* (-1))+3)));
+                        $dataINV = "number_stock=".$_POST["s_".$colorF[0]."_".$colorF[1]."_".$talla]."&price_product_stock=".$_POST["p_".$colorF[1]."_".$colorF[2]."_".$talla];
+                        $url = CurlController::api()."stocks?id=".$codeStock."&nameId=code_stock&token=".$_SESSION["user"]->token_user;
+                        $method = "PUT";
+                        $fields = $dataINV;
+                        $header = array(
+                        "Content-Type" => "application/x-www-form-urlencoded"
+                        );
+                        $updateINV = CurlController::request($url,$method,$fields,$header);
+                        if($updateINV->status == "200"){
+                            echo '
+                            <script>
+                                formatearAlertas();
+                                switAlert("success", "El registro se realizo correctamente", "' . TemplateController::path().'acount&inventario",1500);
+                            </script>'; 
+                        }else{
+                            echo '
+                            <script>
+                                formatearAlertas();
+                                notiAlert(3, "Error: al hacer la modificacion");
+                            </script>'; 
+                            return;
+                        }
+                    }
+                }
+            }{
+                echo '
+                <script>
+                    formatearAlertas();
+                    notiAlert(3, "Error: al hacer la modificacion");
+                </script>'; 
                 return;
             }
         }

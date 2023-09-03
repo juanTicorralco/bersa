@@ -47,21 +47,22 @@ My Account Content
             ======================================-->
             <div class="ps-section__content">
                 <ul class="ps-section__links">
-                    <?php if($_SESSION["user"]->method_user == "direct"): ?>
+                    <?php if($_SESSION["user"]->method_user == "globalAdminister"): ?>
                     <li class="active"><a href="<?php echo $path; ?>acount&orders">Ordenes</a></li>
                     <li><a href="<?php echo $path; ?>acount&registers">Registros</a></li>
                     <li><a href="<?php echo $path; ?>acount&inventario">Inventario</a></li>
-                    <li><a href="<?php echo $path; ?>acount&wishAcount">My Wishlist</a></li>
-                    <li><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
+                    <li><a href="<?php echo $path; ?>acount&ventas">Ventas</a></li>
+                    <!-- <li><a href="<?php //echo $path; ?>acount&wishAcount">My Wishlist</a></li> -->
+                    <!-- <li><a href="<?php //echo $path; ?>acount&my-shopping">My Shopping</a></li> -->
                     <?php endif; ?>
-                    <?php if($_SESSION["user"]->method_user == "administer"): ?>
-                    <li ><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li>
-                    <li><a href="<?php echo $path; ?>acount&list-vendor">Lista vendidos</a></li>
-                    <?php endif; ?>
-                    <?php if($_SESSION["user"]->method_user == "globalAdminister"): ?>
-                    <li><a href="<?php echo $path; ?>acount&my-store">My Store</a></li>
-                    <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li>
-                    <?php endif; ?>
+                    <?php //if($_SESSION["user"]->method_user == "administer"): ?>
+                    <!-- <li ><a href="<?php echo $path; ?>acount&my-shopping">My Shopping</a></li> -->
+                    <!-- <li><a href="<?php echo $path; ?>acount&list-vendor">Lista vendidos</a></li> -->
+                    <?php //endif; ?>
+                    <?php //if($_SESSION["user"]->method_user == "globalAdminister"): ?>
+                    <!-- <li><a href="<?php echo $path; ?>acount&my-store">My Store</a></li> -->
+                    <!-- <li><a href="<?php echo $path; ?>acount&my-sales">My Sales</a></li> -->
+                    <?php //endif; ?>
                 </ul>
                 <!--=====================================
                 Wishlist
@@ -82,6 +83,8 @@ My Account Content
                                 <th>Altura</th>
                                 <th>Status</th>
                                 <th>Precio</th>
+                                <th>Comentario</th>
+                                <th>Gastos</th>
                                 <th>Pago previo</th>
                                 <th>Messenger</th>
                                 <th>Telefono</th>
@@ -95,7 +98,7 @@ My Account Content
                             foreach ($products[0] as $key => $value):?>
                                 <tr >
                                     <td>
-                                        <div class="ps-product--cart">
+                                        <div class="ps-product--cart justify-content-center">
                                             <div class="ps-product__thumbnail">
                                                 <a href="<?php echo $path . $value->url_product; ?>">
                                                     <img src="img/products/<?php echo $value->url_category; ?>/stock/<?php echo $value->image_stock; ?>" alt="<?php echo $value->name_product; ?>">
@@ -123,8 +126,39 @@ My Account Content
                                     <input type="hidden" id="url" value="<?php echo $path ?>" >
                                         <button type="button" onclick="statusConfirm(<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Finalizado', '<?php echo CurlController::api(); ?>')" class="btn btn-success">Finalizar</button>
                                         <button type="button" onclick="statusConfirm(<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Cancelado', '<?php echo CurlController::api(); ?>')" class="btn btn-danger">Cancelar</button></td>
-                                    <?php $priceOrder = json_decode($value->price_order);?>
                                     <td><div class="ps-product__content"><?php echo '$'. $value->price_order; ?></div></td>
+                                    <td>
+                                        <div class="comentOrderVal"></div>
+                                        <input 
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Comentario"
+                                        id="comentOrder"
+                                        maxlength="200"
+                                        required
+                                        pattern = "[.\\,\\0-9]{1,}"
+                                        onchange="validatejs(event, 'parrafo'), cambioOrder(event, 'comentOrder')">
+                                        <div class="valid-feedback"></div>
+                                        <div class="invalid-feedback">Acompleta el campo</div>
+                                        
+                                        
+                                    </td>
+                                    <td>
+                                        <div class="gastosOrderVal"></div>
+                                        <input 
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="$ Gastos"
+                                        id="gastosOrder"
+                                        maxlength="50"
+                                        required
+                                        pattern = "[.\\,\\0-9]{1,}"
+                                        onchange="validatejs(event, 'numbers'), cambioOrder(event, 'gastosOrder')">
+                                        <div class="valid-feedback"></div>
+                                        <div class="invalid-feedback">Acompleta el campo</div>
+                                    </td>
+                                    <?php //$priceOrder = json_decode($value->price_order);?>
+                                    
                                     <td><div class="ps-product__content"><?php echo $value->pago_prev_order; ?></div></td>
                                     <td><a href="https://www.facebook.com/messages/t/<?php echo $value->follow_order; ?>" target='_blank' class='btn btn-info rounded-circle mr-2'><i class='fa fa-eye'></i></a></td>
                                     <td><div class="ps-product__content"><?php echo $value->phone_order; ?></div><a href="tel:<?php echo $value->phone_order; ?>" target="_blank" class="btn btn-success rounded-circle mr-2"><i class='fa fa-phone'></i></a></td>

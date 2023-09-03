@@ -12,7 +12,7 @@ if(localStorage.getItem("token_user")){
        } 
      }
 }
-if(urlMaster != "http://seture.com/acount&login" && urlMaster != "http://seture.com/acount&enrollment" && !localStorage.getItem("token_user")){
+if(urlMaster != "http://bersani.com/acount&login" && urlMaster != "http://bersani.com/acount&enrollment" && !localStorage.getItem("token_user")){
   setCookie("UrlPage", urlMaster, 1);
 }
 /* funcion para resetear url de los filtros */
@@ -483,12 +483,27 @@ function removeWishlist(urlProduct, urlApi) {
   });
 }
 
+function cambioOrder(e, nombre){
+  $("."+nombre+"Vale").remove();
+  let valor = e.target.value
+  $("."+nombre+"Val").append(`<input type="hidden" class="`+ nombre +`Vale" value="`+valor+`" >`);
+}
+
+
 function statusConfirm(numStock,idStock,idOrder, statusorder,urlApi) {
   if(statusorder == "Finalizado"){
     switAlert("confirm", "Esta seguro de Finalizar la orden?", null, null, null).then(resp => {
       if (resp == true) {
         // revisar que el token coincida con la bd
         let token = localStorage.getItem("token_user");
+        let comment = $(".comentOrderVale").val();
+        let gastos = $(".gastosOrderVale").val();
+        if( comment == undefined ||  comment == ""){
+          comment = null;
+        }
+        if(gastos == undefined || gastos == ""){
+          gastos=null;
+        }
         let settings = {
           "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
           "method": "PUT",
@@ -498,6 +513,8 @@ function statusConfirm(numStock,idStock,idOrder, statusorder,urlApi) {
           },
           "data": {
             "status_order": statusorder,
+            "comment_order": comment,
+            "bills_order": gastos,
           },
         };
         $.ajax(settings).done(function (response) {
@@ -923,7 +940,7 @@ function ChangeTallaNew2(event){
   if(talla !== undefined){
     $(".tallaSpesific").append(`<div class="tallaSection_`+idTalla+`"><p> <span class="rounded p-2 border border-dark text-dark">`+talla+`</span>   <button title="Cancelar" type="button" class="btn btn-danger rounded-circle mr-2" onclick="eliminarTC('tallaSection_',`+idTalla+`,'`+talla+`')"><i class='fa fa-trash'></i></button></p></div>`);
     $(".valCounTalla").val(countTalla+1);
-    if(countTalla > 0 ){
+    if(countTalla >= 0 ){
       $(".buttonStock").removeAttr("disabled");
     }
     if(valTalla==""){
@@ -957,6 +974,30 @@ function ChangeTallaNew(event){
         }
       }
     })
+  });
+}
+
+function eliminarInvet(id, tabla, url){
+  let URLactual = window.location;
+  switAlert("confirm", "Esta seguro de eliminar del carrito de compras?", URLactual, null, null).then(resp => {
+    if(resp == true){
+      let settings = {
+        "url" : url+tabla+"s?id="+id+"&nameId=id_"+tabla+"&token="+localStorage.getItem("token_user"),
+        "method" : "DELETE",
+        "timeout" : 0,
+        "headers" : {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+   
+      $.ajax(settings).done(function (response) {
+          if (response.status == 200) {
+            switAlert("success", "La talla y color se elimino correctamente!", URLactual, null, 1500);
+          }else{
+            switAlert("error", "Surgio un error al eliminar", URLactual, null, 1500);
+          }
+      });   
+    }
   });
 }
 
