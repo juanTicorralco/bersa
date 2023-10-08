@@ -21,13 +21,14 @@ class ControllerUser
                     $url = CurlController::api() . "users?register=true";
                     $method = "POST";
                     $fields = array(
-                        "rol_user" => "default",
-                        "displayname_user" => $displayName,
+                        // "rol_user" => "default",
+                        "name_user" => TemplateController::capitalize(strtolower($_POST["createNombre"])),
+                        "lastname_user" => TemplateController::capitalize(strtolower($_POST["createApellido"])),
                         "username_user" => $user,
                         "email_user" => $email,
                         "password_user" => $_POST["createPassword"],
                         "method_user" => "direct",
-                        "date_created_user" => date("Y-m-d")
+                        "date_create_user" => date("Y-m-d")
                     );
                     $header = array(
                         "Content-Type" => "application/x-www-form-urlencoded"
@@ -35,7 +36,6 @@ class ControllerUser
 
 
                     $response = CurlController::request($url, $method, $fields, $header);
-
                     if ($response->status == 200) {
 
                         // registrar email
