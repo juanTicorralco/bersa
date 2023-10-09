@@ -10,6 +10,10 @@
   position: relative;
 }
 
+.ps-banner--market-4 img{
+  width: 100%;
+}
+
 .ps-banner--market-4 h4 {
   margin-bottom: 20px;
   font-size: 16px;
@@ -115,7 +119,7 @@
 }
 
 #homepage-6 .ps-top-categories {
-  padding-bottom: 30px;
+  padding-top: 30px;
 }
 
 @media (min-width: 1680px) {
@@ -125,13 +129,13 @@
 }
 
 #homepage-6 .ps-deal-hot {
-  padding-top: 50px;
+  padding-top: 30px;
   padding-bottom: 30px;
 }
 
 @media (max-width: 767px) {
-  #homepage-6 .ps-promotions .ps-collection {
-    margin-bottom: 30px;
+  #homepage-6 .ps-deal-hot{
+    padding-top: 0;
   }
 }
 a.jo {

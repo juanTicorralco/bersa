@@ -1,10 +1,7 @@
 
 <div class="ps-site-features">
-
     <div class="container">
-
         <div class="ps-block--site-features ps-block--site-features-2">
-
             <div class="ps-block__item">
                 <div class="ps-block__left"><i class="icon-rocket"></i></div>
                 <div class="ps-block__right">
@@ -12,7 +9,6 @@
                     <p>Para todas las compras a partir de $500</p>
                 </div>
             </div>
-
             <div class="ps-block__item">
                 <div class="ps-block__left"><i class="icon-sync"></i></div>
                 <div class="ps-block__right">
@@ -20,7 +16,6 @@
                     <p>Si el producto tiene problemas</p>
                 </div>
             </div>
-
             <div class="ps-block__item">
                 <div class="ps-block__left"><i class="icon-credit-card"></i></div>
                 <div class="ps-block__right">
@@ -28,7 +23,6 @@
                     <p>100% pagos seguros con pasarelas de pago o al recibir el producto</p>
                 </div>
             </div>
-
             <div class="ps-block__item">
                 <div class="ps-block__left"><i class="icon-bubbles"></i></div>
                 <div class="ps-block__right">
@@ -36,9 +30,6 @@
                     <p>Soporte dedicado</p>
                 </div>
             </div>
-
         </div>
-
     </div>
-
 </div><!-- End Home Features-->

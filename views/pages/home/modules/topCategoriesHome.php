@@ -3,7 +3,6 @@ $url = CurlController::api() . "subcategories?orderBy=views_subcategory&orderMod
 $method = "GET";
 $field = array();
 $header = array();
-
 $bestSubcategory = CurlController::request($url, $method, $field, $header)->result;
 ?>
 <div class="container-fluid preloadTrue">
@@ -13,7 +12,6 @@ $bestSubcategory = CurlController::request($url, $method, $field, $header)->resu
                 <div class="ph-col-12">
                     <div class="ph-picture"></div>
                 </div>
-
                 <div class="ph-col-12">
                     <div class="ph-row">
                         <div class="ph-col-12 big"></div>
@@ -26,7 +24,6 @@ $bestSubcategory = CurlController::request($url, $method, $field, $header)->resu
                 <div class="ph-col-12">
                     <div class="ph-picture"></div>
                 </div>
-
                 <div class="ph-col-12">
                     <div class="ph-row">
                         <div class="ph-col-12 big"></div>
@@ -39,7 +36,6 @@ $bestSubcategory = CurlController::request($url, $method, $field, $header)->resu
                 <div class="ph-col-12">
                     <div class="ph-picture"></div>
                 </div>
-
                 <div class="ph-col-12">
                     <div class="ph-row">
                         <div class="ph-col-12 big"></div>
@@ -52,7 +48,6 @@ $bestSubcategory = CurlController::request($url, $method, $field, $header)->resu
                 <div class="ph-col-12">
                     <div class="ph-picture"></div>
                 </div>
-
                 <div class="ph-col-12">
                     <div class="ph-row">
                         <div class="ph-col-12 big"></div>
@@ -63,13 +58,9 @@ $bestSubcategory = CurlController::request($url, $method, $field, $header)->resu
     </div>
 </div>
 <div class="ps-top-categories preloadFalse">
-
     <div class="container">
-
         <h3>Top Subcategorias del mes</h3>
-
         <div class="row">
-
             <?php foreach ($bestSubcategory as $key => $value) : ?>
                 <div class="col-xl-2 col-lg-3 col-sm-4 col-6 ">
                     <div class="ps-block--category">
@@ -79,8 +70,6 @@ $bestSubcategory = CurlController::request($url, $method, $field, $header)->resu
                     </div>
                 </div>
             <?php endforeach; ?>
-
         </div>
     </div>
-
 </div><!-- End Top Categories -->

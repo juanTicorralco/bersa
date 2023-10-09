@@ -4428,6 +4428,9 @@ textarea.form-control {
     -webkit-transition: all .4s ease;
     transition: all .4s ease;
 }
+.ps-block--category img{
+    width: 100%;
+}
 
 .ps-block--category a {
     position: absolute;
@@ -13547,9 +13550,9 @@ textarea.form-control {
     }
 }
 
-.ps-deal-hot {
+/* .ps-deal-hot {
     padding: 70px 0;
-}
+} */
 
 .ps-deal-hot .widget_best-sale {
     border-bottom: 1px solid #d9d9d9;
@@ -16137,7 +16140,7 @@ textarea.form-control {
     display: -webkit-box;
     display: flex;
     -webkit-box-align: center;
-    align-items: center;
+    align-items: end;
     -webkit-box-pack: end;
     justify-content: flex-end;
 }
@@ -16271,8 +16274,6 @@ textarea.form-control {
     transform: translateY(0);
 }
 
-
-
 .navigation--sidebar {
     position: fixed;
     top: 0;
@@ -16401,6 +16402,9 @@ textarea.form-control {
 @media (max-width: 479px) {
     .navigation--sidebar {
         width: 100%;
+    }
+    .header .header__actions>* {
+        margin: 0 10px;
     }
 }
 
