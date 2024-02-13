@@ -1,7 +1,5 @@
 <?php
-
 session_start();
-
 /* Direction Route  */
 $routesArray = explode("/", $_SERVER['REQUEST_URI']);
 
@@ -154,7 +152,7 @@ if($totalPro->status == 200){
         if(!empty($urlParams[0])){
             if(isset($urlProduct->status) && $urlProduct->status == 200){
                 $name = $urlProduct->result[0]->name_product;
-                $title = "Seture | ". $urlProduct->result[0]->name_product;
+                $title = "Bersani | ". $urlProduct->result[0]->name_product;
                 $description = "";
                 foreach(json_decode($urlProduct->result[0]->summary_product, true) as $key => $value){
                     $description .= $value.", ";
@@ -168,16 +166,16 @@ if($totalPro->status == 200){
                 $imagen =  $path."/views/img/products/".$urlProduct->result[0]->url_category."/".$urlProduct->result[0]->image_product;
                 $url = $path.$urlProduct->result[0]->url_product;
             }else{
-                $title = "Seture";
-                $name = "Seture | Home";
+                $title = "Bersani";
+                $name = "Bersani | Home";
                 $description = "Pagina de mercadeo de compra y venta de articulos y la creacion de tiendas";
                 $keywords = "market, products, sales, store, shell";
                 $imagen =  $path."/views/img/bg/about-us.jpg";
                 $url = $path;
             }
         }else{
-            $title = "Seture";
-            $name = "Seture | Home";
+            $title = "Bersani";
+            $name = "Bersani | Home";
             $description = "Pagina de mercadeo de compra y venta de articulos y la creacion de tiendas";
             $keywords = "market, products, sales, store, shell";
             $imagen =  $path."/views/img/bg/about-us.jpg";
@@ -199,8 +197,8 @@ if($totalPro->status == 200){
 
     <!-- metadatod twiter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@Seture">
-    <meta name="twitter:creator" content="@Seture">
+    <meta name="twitter:site" content="@Bersani">
+    <meta name="twitter:creator" content="@Bersani">
     <meta name="twitter:title" content="<?php echo $name; ?>">
     <meta name="twitter:description" content="<?php echo $description; ?>">
     <meta name="twitter:image" content="<?php echo $imagen; ?>">

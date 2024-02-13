@@ -557,8 +557,8 @@
     -webkit-transform: translateY(0);
     transform: translateY(0);
 }
-.ps-btn,
 /* botones */
+.ps-btn,
 button.ps-btn {
     display: inline-block;
     padding: 15px 45px;
@@ -2619,7 +2619,7 @@ button {
     }
 }
 
-.ps-btn,
+/* .ps-btn,
 button.ps-btn {
     display: inline-block;
     padding: 15px 45px;
@@ -2634,7 +2634,7 @@ button.ps-btn {
     -webkit-transition: all .4s ease;
     transition: all .4s ease;
     cursor: pointer;
-}
+} */
 
 .ps-btn--rounded,
 button.ps-btn--rounded {
@@ -2732,7 +2732,6 @@ button.ps-btn:active {
     background-color: var(--colorSecundario);
     color: var(--colorBoton);
     border: 2px solid var(--colorBoton);
-    padding: 0 25px;
 }
 
 .ps-btn:hover.ps-btn--black,
