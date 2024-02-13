@@ -489,195 +489,59 @@ function cambioOrder(e, nombre){
   $("."+nombre+"Val").append(`<input type="hidden" class="`+ nombre +`Vale" value="`+valor+`" >`);
 }
 
-
-function statusConfirm(numStock,idStock,idOrder, statusorder,urlApi) {
-  if(statusorder == "Finalizado"){
-    switAlert("confirm", "Esta seguro de Finalizar la orden?", null, null, null).then(resp => {
-      if (resp == true) {
-        // revisar que el token coincida con la bd
-        let token = localStorage.getItem("token_user");
-        let comment = $(".comentOrderVale").val();
-        let gastos = $(".gastosOrderVale").val();
-        if( comment == undefined ||  comment == ""){
-          comment = null;
-        }
-        if(gastos == undefined || gastos == ""){
-          gastos=null;
-        }
-        let settings = {
-          "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
-          "method": "PUT",
-          "timeaot": 0,
-          "headers": {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          "data": {
-            "status_order": statusorder,
-            "comment_order": comment,
-            "bills_order": gastos,
-          },
-        };
-        $.ajax(settings).done(function (response) {
-              if (response.status == 200) {
-                switAlert("success", "La orden se finalizo correctamente", null, null, 1500);
-                window.location = $("#url").val()+"acount&orders";   
-              }else{
-                switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-              }
-        });
-      }
-    });
-  }else if(statusorder == "Cancelado"){
-    switAlert("confirm", "Esta seguro de Cancelar la orden?", null, null, null).then(resp => {
-      if (resp == true) {
-        // revisar que el token coincida con la bd
-        let token = localStorage.getItem("token_user");
-        let settings = {
-          "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
-          "method": "PUT",
-          "timeaot": 0,
-          "headers": {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          "data": {
-            "status_order": statusorder,
-          },
-        };
-        $.ajax(settings).done(function (response) {
-              if (response.status == 200) {
-                let settings2 = {
-                  "url": urlApi + "stocks?id=" + idStock + "&nameId=id_stock&token=" + token,
-                  "method": "PUT",
-                  "timeaot": 0,
-                  "headers": {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                  },
-                  "data": {
-                    "number_stock": numStock+1,
-                  },
-                };
-                $.ajax(settings2).done(function (response) {
-                  if (response.status == 200) {
-                    switAlert("success", "La orden se cancelo correctamente", null, null, 1500);
-                    window.location = $("#url").val()+"acount&orders";   
-                  }else{
-                    switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-                  }
-                });
-              }else{
-                switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-              }
-        });
-      }
-    });
-  }else{
-    switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-  }
-}
-
-function statusConfirmRegister(outStockOrder,numStock,idStock,idOrder, statusorder,urlApi) {
+function statusConfirmRegister(outStockOrder,numStock,idStock,idOrder, statusorder,url, pagina) {
+  let data = new FormData();
   if(statusorder == "Cancelado"){
-    switAlert("confirm", "Esta seguro de Cancelar la orden?", null, null, null).then(resp => {
-      if (resp == true) {
-        // revisar que el token coincida con la bd
-        let token = localStorage.getItem("token_user");
-        let settings = {
-          "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
-          "method": "PUT",
-          "timeaot": 0,
-          "headers": {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          "data": {
-            "status_order": statusorder,
-          },
-        };
-        $.ajax(settings).done(function (response) {
-              if (response.status == 200) {
-                if(outStockOrder == 1){
-                  let settings2 = {
-                    "url": urlApi + "stocks?id=" + idStock + "&nameId=id_stock&token=" + token,
-                    "method": "PUT",
-                    "timeaot": 0,
-                    "headers": {
-                      "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    "data": {
-                      "number_stock": numStock+1,
-                    },
-                  };
-                  $.ajax(settings2).done(function (response) {
-                    if (response.status == 200) {
-                      switAlert("success", "La orden se cancelo correctamente y se actualizo el stock", null, null, 1500);
-                      window.location = $("#url").val()+"acount&registers";   
-                    }else{
-                      switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-                    }
-                  });
-                }else if(outStockOrder == 0){
-                  switAlert("success", "La orden se cancelo correctamente y no afecto el stock", null, null, 1500);
-                      window.location = $("#url").val()+"acount&registers";  
-                }
-              }else{
-                switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-              }
-        });
-      }
-    });
+    data.append("idOrder", idOrder);
+    data.append("idStock", idStock);
+    data.append("outStockOrder", outStockOrder);
+    data.append("numStock", numStock);
+    data.append("statusorder", statusorder);   
   }else if(statusorder == "Confirmado" && outStockOrder==1){
-    switAlert("confirm", "Esta seguro de confirmar la orde/n?", null, null, null).then(resp => {
-      if (resp == true) {
-        // revisar que el token coincida con la bd    
-        let token = localStorage.getItem("token_user");
-        let settings = {
-          "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
-          "method": "PUT",
-          "timeaot": 0,
-          "headers": {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          "data": {
-            "status_order": statusorder,
-          },
-        };
-        $.ajax(settings).done(function (response) {
-          if (response.status == 200) {
-              switAlert("success", "La orden se confirmo correctamente pero no hay stock", null, null, 1500);
-              window.location = $("#url").val()+"acount&registers";
-          }else{
-            switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-          }
-        });
-      }
-    });
+    data.append("idOrder", idOrder);
+    data.append("statusorder", statusorder);
+  }else if(statusorder == "Finalizado"){
+    let comment = $(".comentOrderVale").val();
+    let gastos = $(".gastosOrderVale").val();
+    if( comment == undefined ||  comment == ""){
+      comment = null;
+    }
+    if(gastos == undefined || gastos == ""){
+      gastos=null;
+    }
+    data.append("idOrder", idOrder);
+    data.append("statusorder", statusorder);
+    data.append("comment", comment);
+    data.append("gastos", gastos); 
+  }else if(statusorder == "inStock"){
+    data.append("idOrder", idOrder);
   }else{
     switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+    return;
   }
-}
 
-function plusStock(idOrder, urlApi){
-  switAlert("confirm", "Esta seguro de que ya hay stock?", null, null, null).then(resp => {
+  switAlert("confirm", "Seguro que quieres marcar la orden como "+statusorder+"?", null, null, null).then(resp => {
     if (resp == true) {
-      // revisar que el token coincida con la bd
-      let token = localStorage.getItem("token_user");
-      let settings = {
-        "url": urlApi + "orders?id=" + idOrder + "&nameId=id_order&token=" + token,
-        "method": "PUT",
-        "timeaot": 0,
-        "headers": {
-          "Content-Type": "application/x-www-form-urlencoded",
+      $.ajax({
+        url : url + "ajax/modifyStock.php",
+        method : "POST",
+        data : data,
+        contentType : false,
+        cache : false,
+        processData : false,
+        success : function(response){
+          if(response == "200"){
+            switAlert("success", "La orden se ah " + statusorder, null, null, 1500);
+            window.location = url+"acount&" + pagina;
+          }else if(response == "400"){
+            switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+          }else{
+            switAlert("error", "Para proteger tus datos, si no hay actividad en tu cuenta, se cierra automaticamente. Vuelve a logearte!", url + "acount&logout","");
+          }
         },
-        "data": {
-          "stock_out_order": 1,
-        },
-      };
-      $.ajax(settings).done(function (response) {
-            if (response.status == 200) {
-              switAlert("success", "La aprovado el stock", null, null, 1500);
-              window.location = $("#url").val()+"acount&registers";   
-            }else{
-              switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
-            }
+        error : function(jqXHR, textStatus, errorThrown){
+          console.log(textStatus + " " + errorThrown);
+        }
       });
     }
   });
@@ -1001,6 +865,136 @@ function eliminarInvet(id, tabla, url){
   });
 }
 
+function eliminarInventarioTotal(id, api, url){
+  let URLactual = window.location;
+  switAlert("confirm", "Esta seguro de eliminar del carrito de compras?", URLactual, null, null).then(resp => {
+    if(resp == true){
+      let data = new FormData();
+      data.append("idProduct", id);
+      $.ajax({
+        url : url + "ajax/stockDelete.php",
+        method : "POST",
+        data : data,
+        contentType : false,
+        cache : false,
+        processData : false,
+        success : function(response){
+          setTimeout(() => {
+            let settings3 = {
+              "url" : api+"orders?id="+id+"&nameId=id_product_order&token="+localStorage.getItem("token_user"),
+              "method" : "DELETE",
+              "timeout" : 0,
+              "headers" : {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            };
+            $.ajax(settings3).done(function(response3){
+              if(response3.status == 200){
+              }
+            });
+          }, 1500);
+
+          setTimeout(() => {
+            let settings1 = {
+              "url" : api+"stocks?id="+id+"&nameId=id_product_stock&token="+localStorage.getItem("token_user"),
+              "method" : "DELETE",
+              "timeout" : 0,
+              "headers" : {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            };
+            
+            $.ajax(settings1).done(function(response1){
+              if(response1.status == 200){
+              }
+            });
+          }, 3000);
+
+          setTimeout(() => {
+            let settings2 = {
+              "url" : api+"products?id="+id+"&nameId=id_product&token="+localStorage.getItem("token_user"),
+              "method" : "DELETE",
+              "timeout" : 0,
+              "headers" : {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            };
+
+            $.ajax(settings2).done(function(response2){
+              if(response2.status == 200){
+                switAlert("success", "Se elimino correctamente", null, null, 1500);
+                setTimeout(() => {
+                  window.location = url+"acount&inventario";
+                }, 1500);
+              }
+            });
+          }, 6000);
+        },
+        error : function(jqXHR, textStatus, errorThrown){
+          console.log(textStatus + " " + errorThrown);
+        }
+      });
+
+
+      // let urlProducts = url+tabla+'s?linkTo=id_'+tabla+'&equalTo='+id+'&select=id_product,image_product';            
+      // let settings = {
+      //   url: urlProducts,
+      //   metod: 'GET',
+      //   timeaot: 0,
+      // };
+  
+      // $.ajax(settings).done(function (response) {
+      //   if (response.status == 200) {
+      //     console.log(response.result[0].id_product);
+      //     let urlProducts = url+'stocks?linkTo=id_product_stock'+'&equalTo='+response.result[0].id_product+'&select=id_stock,image_stock';            
+      //     let settings = {
+      //       url: urlProducts,
+      //       metod: 'GET',
+      //       timeaot: 0,
+      //     };
+      
+      //     $.ajax(settings).done(function (response) {
+      //       if (response.status == 200) {
+      //       let listImagen=Array();
+      //         response.result.forEach(i => {
+      //           listImagen.push(i.image_stock);
+      //         });
+      //         for(var i = listImagen.length -1; i >=0; i--){
+      //           if(listImagen.indexOf(listImagen[i]) !== i) listImagen.splice(i,1);
+      //         }
+      //         $.ajax({
+      //           method: "POST",
+      //           url: "../wrap.php",
+      //           data: { text: $("p.unbroken").text() }
+      //         })
+      //           .done(function( response ) {
+      //             $("p.broken").html(response);
+      //           });
+      //         console.log(listImagen);
+      //       }
+      //     });
+      //   }
+      // });
+      // let settings = {
+      //   "url" : url+tabla+"s?id="+id+"&nameId=id_"+tabla+"&token="+localStorage.getItem("token_user"),
+      //   "method" : "DELETE",
+      //   "timeout" : 0,
+      //   "headers" : {
+      //     "Content-Type": "application/x-www-form-urlencoded",
+      //   },
+      // };
+   
+      // $.ajax(settings).done(function (response) {
+      //     if (response.status == 200) {
+      //       switAlert("success", "La talla y color se elimino correctamente!", URLactual, null, 1500);
+      //     }else{
+      //       switAlert("error", "Surgio un error al eliminar", URLactual, null, 1500);
+      //     }
+      // });   
+    }
+  });
+}
+
 function eliminarTC(nombre, id, tipo){
   let nuevoValor="";
   if(nombre == "colorSection_"){
@@ -1051,76 +1045,82 @@ function addStock(){
   $(".selectStock").show();
   let color = $(".valColor").val().split(",");
   let talla = $(".valTalla").val().split(",");
-  let colorF, count=1;
+  let colorF, count=1, count2=1;
  
   color.forEach(item =>{
     colorF = item.split("_");
+    $('.selectStock').append(`
+    <!-- IMAGEN-->
+    <div class="row">
+      <div class="form-group">
+          <label>Imagen Principal Product<sup class="text-danger">*</sup></label>
+          <div class="form-group__content">
+              <label class="pb-5" for="`+count2+`logoProduct">
+                  <img src="img/products/default/default-image.jpg" class="img-fluid `+count2+`changeProduct" style="width:150px;">
+              </label>
+              <div class="custom-file">
+                  <input 
+                  type="file"
+                  id="`+count2+`logoProduct"
+                  class="custom-file-input"
+                  name="l_`+colorF[1]+`_`+colorF[2]+`"
+                  accept="image/*"
+                  maxSize="2000000"
+                  onchange="validateImageJs(event,'`+count2+`changeProduct')"
+                  required>
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback">El logo es requerida</div>
+                  <label for="logoProduct" class="custom-file-label">Subir</label>
+              </div>
+          </div>
+      </div>
+    </div>
+    `);
+    count2++;
     talla.forEach(tallaF=>{
       $('.selectStock').append(`
       <div></div>
         <label>Color: <span class="rounded p-2 border border-dark" style="background-color: `+colorF[1]+`; color: `+colorF[0]+`;">`+colorF[2]+`</span> Talla: <span class="rounded p-2 border border-dark text-dark">`+tallaF+`</span><sup class="text-danger">*</sup></label>
         <div class="row">
-              <!-- Telefono -->
-              <div class="col-12 col-lg-6 form-group__content input-group mx-0 pr-0 mb-3">
-                <div class="input-group-append">
-                    <span class="input-group-text">
-                        Stock:
-                    </span>
-                </div>
-                <input 
-                type="text"
-                class="form-control"
-                placeholder="N° Stock"
-                name="s_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
-                required
-                pattern = '[-\\(\\)\\0-9 ]{1,}'
-                onchange="validatejs(event, 'phone')">
-                <div class="valid-feedback"></div>
-                <div class="invalid-feedback">Acompleta el campo</div>
+          <!-- STOCK -->
+          <div class="col-12 col-lg-6 form-group__content input-group mx-0 pr-0 mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    Stock:
+                </span>
             </div>
-            <!-- Messenguer -->
-            <div class="col-12 col-lg-6 form-group__content input-group mx-0 pr-0 mb-3">
-                <div class="input-group-append">
-                    <span class="input-group-text">
-                        Precio:
-                    </span>
-                </div>
-                <input 
-                type="text"
-                class="form-control"
-                placeholder="$ Precio"
-                name="p_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
-                required
-                pattern = '[.\\,\\0-9]{1,}'
-                onchange="validatejs(event, 'numbers')">
-                <div class="valid-feedback"></div>
-                <div class="invalid-feedback">Acompleta el campo</div>
-            </div>
-            <div class="form-group">
-                <label>Imagen Principal Product<sup class="text-danger">*</sup></label>
-                <div class="form-group__content">
-                    <label class="pb-5" for="`+count+`logoProduct">
-                        <img src="img/products/default/default-image.jpg" class="img-fluid `+count+`changeProduct" style="width:150px;">
-                    </label>
-                    <div class="custom-file">
-                        <input 
-                        type="file"
-                        id="`+count+`logoProduct"
-                        class="custom-file-input"
-                        name="l_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
-                        accept="image/*"
-                        maxSize="2000000"
-                        onchange="validateImageJs(event,'`+count+`changeProduct')"
-                        required>
-                        <div class="valid-feedback"></div>
-                        <div class="invalid-feedback">El logo es requerida</div>
-                        <label for="logoProduct" class="custom-file-label">Subir</label>
-                    </div>
-                </div>
+            <input 
+            type="text"
+            class="form-control"
+            placeholder="N° Stock"
+            name="s_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
+            required
+            pattern = '[-\\(\\)\\0-9 ]{1,}'
+            onchange="validatejs(event, 'phone')">
+            <div class="valid-feedback"></div>
+            <div class="invalid-feedback">Acompleta el campo</div>
+          </div>
+          <!-- PRECIO -->
+          <div class="col-12 col-lg-6 form-group__content input-group mx-0 pr-0 mb-3">
+              <div class="input-group-append">
+                  <span class="input-group-text">
+                      Precio:
+                  </span>
+              </div>
+              <input 
+              type="text"
+              class="form-control"
+              placeholder="$ Precio"
+              name="p_`+colorF[1]+`_`+colorF[2]+`_`+tallaF+`"
+              required
+              pattern = '[.\\,\\0-9]{1,}'
+              onchange="validatejs(event, 'numbers')">
+              <div class="valid-feedback"></div>
+              <div class="invalid-feedback">Acompleta el campo</div>
             </div>
         </div>
       `);
-    count++;
+      count++;
     });
   });
 }
@@ -1611,7 +1611,6 @@ function newOrden(metodo,status,id,totals){
     };
 
     $.ajax(settings).done(function (response) {
-      console.log(response);
       idOrder.push(response.result.idlast);
       if (response.status == 200) {
         // Crear comision
@@ -1921,6 +1920,17 @@ function validarStore(){
 function changecategory(event){
   $(".subcategoryProduct").show();
   let idCategory = event.target.value.split("_")[0];
+  let categoryName = event.target.value.split("_")[1];
+  // console.log(event.target.value);
+  if(categoryName === "accesorios"){
+    $('.categoryAccesorios').addClass('d-none');
+    $(".buttonStock").removeAttr("disabled");
+  }else{
+    $('.categoryAccesorios').removeClass('d-none');
+    $(".buttonStock").attr('disabled', 'disabled');
+  }
+
+
   let settings = {
     "url": $("#urlApi").val()+"subcategories?equalTo="+idCategory+"&linkTo=id_category_subcategory&select=id_subcategory,name_subcategory,title_list_subcategory",
     "method":"GET",

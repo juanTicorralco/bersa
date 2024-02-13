@@ -35,8 +35,6 @@ class ControllerDelete{
         if(file_exists("../views/img/products/".$deleteProduct->url_category."/vertical/".$deleteProduct->vertical_slider_product)){
             unlink("../views/img/products/".$deleteProduct->url_category."/vertical/".$deleteProduct->vertical_slider_product);
         }
-
-        
     }
 }
 if(isset($_POST["idProduct"])){

@@ -135,7 +135,7 @@ class TemplateController
                 if(isset($image["mode"]) && $image["mode"] == "base64"){
                     file_put_contents($folderPath, file_get_contents($image["tmp_name"]));
                 }else{
-                    // crear una copia de la imagen 
+                    // crear una copia de la imagen
                     $start = imagecreatefromjpeg($image["tmp_name"]);
                     // intrucciones para aplicar a la imagen definitiva
                     $end = imagecreatetruecolor($width, $heigt);

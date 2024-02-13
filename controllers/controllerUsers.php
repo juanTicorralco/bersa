@@ -1165,32 +1165,38 @@ class ControllerUser
                 if($saveProd->status == "200"){
                     $colores = explode(",", $_POST["valColor"]);
                     $tallas = explode(",", $_POST["valTalla"]);
+                    $count = 1;
                     foreach($colores as $key => $color){
                         $colorF = explode("_", $color);
+
+                        $image = $_FILES["l_".$colorF[1]."_".$colorF[2]];
+                        $folder = "img/products";
+                        $path = explode("_", $_POST['categoryProduct'])[1]."/stock";
+                        $width = 300;
+                        $heigth = 300;
+                        print_r($_POST["urlProduct"]); 
+
+                        $name = $_POST["urlProduct"].$count;
+                        $count++;
+
+                        $saveImageProduct = TemplateController::AlmacenPhoto($image, $folder, $path, $width, $heigth, $name);
+                        
+                        if($saveImageProduct == 'error'){
+                            echo '
+                                <script>
+                                    formatearAlertas();
+                                    notiAlert(3, "Error: al salvar la portada del producto");
+                                </script>'; 
+                            return;
+                        }
                         foreach($tallas as $key2 => $talla){
                             $name = '';
                             $explode = explode(' ',TemplateController::capitalize( $_POST["nameProduct"]));
                             foreach($explode as $x){
                                 $name .=  $x[0];
                             }
-      
                             $codeStock = $saveProd->result->idlast . strtoupper($name) . $talla . strtoupper(substr($colorF[2], 0, ((strlen($colorF[2])* (-1))+3)));
-                            $image = $_FILES["l_".$colorF[1]."_".$colorF[2]."_".$talla];
-                            $folder = "img/products";
-                            $path = explode("_", $_POST['categoryProduct'])[1]."/stock";
-                            $width = 300;
-                            $heigth = 300;
-                            $name = $codeStock;
-    
-                            $saveImageProduct = TemplateController::AlmacenPhoto($image, $folder, $path, $width, $heigth, $name);
-                            if($saveImageProduct == 'error'){
-                                echo '
-                                    <script>
-                                        formatearAlertas();
-                                        notiAlert(3, "Error: al salvar la portada del producto");
-                                    </script>'; 
-                                return;
-                            }
+            
                             $dataProduct = array(
                                 "id_product_stock" =>$saveProd->result->idlast,
                                 "id_category_stock"=> explode("_", $_POST["categoryProduct"])[0],
@@ -1341,9 +1347,9 @@ class ControllerUser
                             if($x ==! "" ){
                                 $name .=  $x[0];
                             }
-                        }
+                        }                     
                         $codeStock = $idProduct . strtoupper($name) . $talla . strtoupper(substr($colorF[1], 0, ((strlen($colorF[1])* (-1))+3)));
-                        $dataINV = "number_stock=".$_POST["s_".$colorF[0]."_".$colorF[1]."_".$talla]."&price_product_stock=".$_POST["p_".$colorF[1]."_".$colorF[2]."_".$talla];
+                        $dataINV = "number_stock=".$_POST["s_".$colorF[0]."_".$colorF[1]."_".$talla]."&price_product_stock=".$_POST["p_".$colorF[0]."_".$colorF[1]."_".$talla];
                         $url = CurlController::api()."stocks?id=".$codeStock."&nameId=code_stock&token=".$_SESSION["user"]->token_user;
                         $method = "PUT";
                         $fields = $dataINV;

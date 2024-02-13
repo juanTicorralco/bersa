@@ -14,7 +14,7 @@ if (!isset($_SESSION['user'])) {
     return;
     }else{
         // traer la lista de deseos
-        $select="id_order,url_product,pago_prev_order,url_category,image_product,hour_order,name_product,name_buyer_order,phone_order,stacion_order,day_order,spesifications_order,status_order,price_order,follow_order,name_product,color_stock,size_stock,color_hexa_stock,id_stock_order,number_stock,image_stock";
+        $select="id_order,url_product,pago_prev_order,url_category,image_product,hour_order,name_product,name_buyer_order,phone_order,stacion_order,day_order,spesifications_order,status_order,price_order,follow_order,name_product,color_stock,size_stock,color_hexa_stock,id_stock_order,number_stock,image_stock,stock_out_order";
         $products= array();
         date_default_timezone_set('UTC');
         date_default_timezone_set("America/Mexico_City");
@@ -124,8 +124,8 @@ My Account Content
                                     <td><div class="ps-product__content"><?php echo $spesificationsProduct[0]->altura[0];?></div></td>
                                     <td>
                                     <input type="hidden" id="url" value="<?php echo $path ?>" >
-                                        <button type="button" onclick="statusConfirm(<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Finalizado', '<?php echo CurlController::api(); ?>')" class="btn btn-success">Finalizar</button>
-                                        <button type="button" onclick="statusConfirm(<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Cancelado', '<?php echo CurlController::api(); ?>')" class="btn btn-danger">Cancelar</button></td>
+                                        <button type="button" onclick="statusConfirmRegister('',<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Finalizado', '<?php echo TemplateController::path(); ?>','orders')" class="btn btn-success">Finalizar</button>
+                                        <button type="button" onclick="statusConfirmRegister(<?php echo $value->stock_out_order;?>,<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Cancelado', '<?php echo TemplateController::path(); ?>','orders')" class="btn btn-danger">Cancelar</button></td>
                                     <td><div class="ps-product__content"><?php echo '$'. $value->price_order; ?></div></td>
                                     <td>
                                         <div class="comentOrderVal"></div>

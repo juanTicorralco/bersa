@@ -155,7 +155,8 @@ My Account Content
                                         <!-- <a target="_blank" class="btn btn-success rounded-circle mr-2"><i class='fa  fa-check-square'></i></a> -->
                                         <a href="<?php echo TemplateController::path();?>acount&inventario?view=<?php echo $value->id_product;?>" class="btn btn-dark text-white rounded-circle mr-2"><i class='fa fa-eye'></i></a>
                                         <a href="<?php echo TemplateController::path();?>acount&inventario?edit=<?php echo $value->id_product;?>" class="btn btn-info text-white rounded-circle mr-2"><i class='fa fa-pencil-alt'></i></a>
-                                        <a target="_blank" class="btn btn-danger text-white rounded-circle mr-2"><i class='fa fa-trash'></i></a>
+                                        <button title="Eliminar" type="button" class="btn btn-danger rounded-circle mr-2" onclick="eliminarInventarioTotal(<?php echo $value->id_product ?>,'<?php echo CurlController::api(); ?>','<?php echo TemplateController::path(); ?>')"><i class='fa fa-trash'></i></button>
+
                                     </td>
                                     <td><div class="ps-product__content">
                                     <?php foreach($stockProduct[0] as $key2 => $value2){
@@ -320,8 +321,8 @@ My Account Content
                     </div>
                     <!-- Especificaciones -->
                     <div class="form-group">
-                        <label>Selecciona los Tallas<sup class="text-danger">*</sup></label>
-                        <div class="row mb-3 inputEspesifications">
+                        <label class="categoryAccesorios">Selecciona los Tallas<sup class="text-danger">*</sup></label>
+                        <div class="row mb-3 inputEspesifications categoryAccesorios">
                             <div class="col-12 col-lg-6 form-group__content input-group">
                                 <?php
                                     $dataTalla = file_get_contents("views/json/tallas.json");
@@ -331,7 +332,7 @@ My Account Content
                                 class="form-control"
                                 name="SelectLinea"
                                 onchange="ChangeTallaNew(event)"
-                                required>
+                                >
                                     <option value="">Tipo</option>
                                     <?php foreach($SelectTalla as $key => $value):?>
                                         <?php //if(key($value)=="nombre"): ?>
@@ -339,19 +340,16 @@ My Account Content
                                             <?php //endif ?>
                                     <?php endforeach; ?>
                                 </select>
-                                <div class="valid-feedback"></div>
-                                <div class="invalid-feedback">Acompleta el campo</div>
                             </div>
                             <div class="col-12 col-lg-6 form-group__content input-group mx-0 pr-0 mb-3 selectTalla" style="display: none ;">
                                 <select 
                                     class="form-control"
                                     name="selectTalla"
                                     onchange="ChangeTallaNew2(event)"
-                                    required>
+                                    >
                                     <option value="">Tallas</option>
                                 </select>
-                                <div class="valid-feedback"></div>
-                                <div class="invalid-feedback">El nombre es requerido</div>
+                               
                             </div>
                             <div class="col-12 col-lg-6 form-group__content input-group tallaSpesific">
                                 <input type="hidden" name="valTalla" class="valTalla" value="" >

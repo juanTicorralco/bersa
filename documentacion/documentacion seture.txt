@@ -9,6 +9,11 @@
      -direct
      -globalAdminister
      -administer
+2 .- si no funciona la parte de de imagenes ir a php.ini y descomentar la siguiente linea: 
+extension=gd
+esto hara que se puedan guardar las imagenes 
+
+
 
 datos de creacion de usuario 
 23

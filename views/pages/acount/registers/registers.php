@@ -122,6 +122,18 @@ My Account Content
                                             }else if($value->stock_out_order == 1){
                                                 $colorStock = "success";
                                             }
+
+                                            if($value->status_order == "Pendiente"){
+                                                $colorStatus = "warning";
+                                            }else if($value->status_order == "Confirmado"){
+                                                $colorStatus = "success";
+                                            }else if($value->status_order == "Cambio"){
+                                                $colorStatus = "info";
+                                            }else if($value->status_order == "Cancelado"){
+                                                $colorStatus = "danger";
+                                            }else if($value->status_order == "Finalizado"){
+                                                $colorStatus = "success";
+                                            }
                                         ?>
                                         <td class="bg-<?php echo $colorStock; ?>">
                                             <div class="ps-product--cart justify-content-center">
@@ -148,17 +160,17 @@ My Account Content
                                         <td><div class="ps-product__content"><?php echo $value->size_stock; ?></div></td>
                                         <td><div class="ps-product__content"><?php echo $spesificationsProduct[0]->peso[0];?></div></td>
                                         <td><div class="ps-product__content"><?php echo $spesificationsProduct[0]->altura[0];?></div></td>
-                                        <td><div class="ps-product__content"><?php echo $value->status_order; ?></div></td>
+                                        <td class="bg-<?php echo $colorStatus; ?>"><div class="ps-product__content"><?php echo $value->status_order; ?></div></td>
                                         <td>
                                         <input type="hidden" id="url" value="<?php echo $path ?>" >
                                             <?php if($value->status_order == "Pendiente" && $value->stock_out_order ==1): ?>
-                                            <button title="Confirmar" type="button" class="btn btn-success rounded-circle mr-2" onclick="statusConfirmRegister(<?php echo $value->stock_out_order ?>,<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Confirmado', '<?php echo CurlController::api(); ?>')"><i class='fa  fa-check-square'></i></button>
+                                            <button title="Confirmar" type="button" class="btn btn-success rounded-circle mr-2" onclick="statusConfirmRegister(<?php echo $value->stock_out_order ?>,<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Confirmado', '<?php echo TemplateController::path(); ?>','registers')"><i class='fa  fa-check-square'></i></button>
                                             <?php endif; ?>
                                             <?php if($value->stock_out_order == 0): ?>
-                                            <button title="En Stock" type="button" class="btn btn-success rounded-circle mr-2" onclick="plusStock(<?php echo $value->id_order;?>, '<?php echo CurlController::api(); ?>')"><i class='fa  fa-plus'></i></button>
+                                            <button title="En Stock" type="button" class="btn btn-success rounded-circle mr-2" onclick="statusConfirmRegister(<?php echo $value->stock_out_order ?>,<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'inStock', '<?php echo TemplateController::path(); ?>','registers')"><i class='fa  fa-plus'></i></button>
                                             <?php endif; ?>
                                             <a title="Editar" href="http://bersani.com/acount&registers?Editar=<?php echo $value->id_order; ?>" class="btn btn-info rounded-circle mr-2"><i class='fa fa-pencil-alt'></i></a>
-                                            <button title="Cancelar" type="button" class="btn btn-danger rounded-circle mr-2" onclick="statusConfirmRegister(<?php echo $value->stock_out_order ?>,<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Cancelado', '<?php echo CurlController::api(); ?>')"><i class='fa fa-trash'></i></button>
+                                            <button title="Cancelar" type="button" class="btn btn-danger rounded-circle mr-2" onclick="statusConfirmRegister(<?php echo $value->stock_out_order ?>,<?php echo $value->number_stock;?>,<?php echo $value->id_stock_order;?>,<?php echo $value->id_order;?>,'Cancelado', '<?php echo TemplateController::path(); ?>','registers')"><i class='fa fa-trash'></i></button>
                                         </td>
                                         <td><div class="ps-product__content"><?php echo '$'. $value->price_order; ?></div></td>
                                         <td><div class="ps-product__content"><?php echo $value->pago_prev_order; ?></div></td>
