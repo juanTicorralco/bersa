@@ -547,6 +547,54 @@ function statusConfirmRegister(outStockOrder,numStock,idStock,idOrder, statusord
   });
 }
 
+function pdfRegister(url) {
+  switAlert("confirm", "Seguro que quieres crear el ticket?", null, null, null).then(resp => {
+    if (resp == true) {
+      let data = new FormData();
+      let nombreProduct = $(".nombreProduct").val();
+      let cantidad = $(".cantidad").val();
+      let subtotal = $(".subtotal").val();
+      let nombreProductArray = nombreProduct.split(",");
+      let cantidadArray = cantidad.split(",");
+      let subtotalArray = subtotal.split(",");
+      let arrayTotal = Array();
+      let arr2 = Array();
+      for(let i=0; i<nombreProductArray.length ; i++){
+        let precioSubTotal = cantidadArray[i] * subtotalArray[i];
+        arr2= [nombreProductArray[i], cantidadArray[i], precioSubTotal];
+        arrayTotal.push(arr2);
+        arr2 = [];
+      }
+      data.append("nombreProduct", nombreProduct);
+      data.append("cantidad", cantidad);
+      data.append("subtotal", subtotal);
+      data.append("arrayTotal", JSON.stringify(arrayTotal));
+      $.ajax({
+        url : url + "ajax/PDFCreate.php",
+        method : "POST",
+        data : data,
+        contentType : false,
+        cache : false,
+        processData : false,
+        success : function(response){
+          if(response == "200"){
+            switAlert("success", "Se creo el ticket correctamente", null, null, 1500);
+            // window.location = url+"acount&" + pagina;
+          }else if(response == "400"){
+            switAlert("error", "Ocurrio un error. Vuelve a intentarlo", null, null, 1500);
+          }
+          // else{
+          //   switAlert("error", "Para proteger tus datos, si no hay actividad en tu cuenta, se cierra automaticamente. Vuelve a logearte!", url + "acount&logout","");
+          // }
+        },
+        error : function(jqXHR, textStatus, errorThrown){
+          console.log(textStatus + " " + errorThrown);
+        }
+      });
+    }
+  });
+}
+
 // funcion que remueve de bag
 function removeBagSC(urlProduct, urlPagina, idUser, numero,urlapi){
   switAlert("confirm", "Esta seguro de eliminar del carrito de compras?", urlPagina, null, null).then(resp => {
@@ -945,7 +993,6 @@ function eliminarInventarioTotal(id, api, url){
   
       // $.ajax(settings).done(function (response) {
       //   if (response.status == 200) {
-      //     console.log(response.result[0].id_product);
       //     let urlProducts = url+'stocks?linkTo=id_product_stock'+'&equalTo='+response.result[0].id_product+'&select=id_stock,image_stock';            
       //     let settings = {
       //       url: urlProducts,
@@ -970,7 +1017,6 @@ function eliminarInventarioTotal(id, api, url){
       //           .done(function( response ) {
       //             $("p.broken").html(response);
       //           });
-      //         console.log(listImagen);
       //       }
       //     });
       //   }
@@ -1916,13 +1962,11 @@ function validarStore(){
     scrollTop: $("#crearProduct").offset().top-100 
   });
 }
-
-function changecategory(event){
-  $(".subcategoryProduct").show();
-  let idCategory = event.target.value.split("_")[0];
-  let categoryName = event.target.value.split("_")[1];
-  // console.log(event.target.value);
-  if(categoryName === "accesorios"){
+function changeToProduct(event){
+  $(".productPrincipal").show();
+  let idSubcategory = event.target.value.split("_")[0];
+  let subcategoryName = event.target.value.split("_")[1];
+  if(subcategoryName === "accesorios"){
     $('.categoryAccesorios').addClass('d-none');
     $(".buttonStock").removeAttr("disabled");
   }else{
@@ -1930,6 +1974,33 @@ function changecategory(event){
     $(".buttonStock").attr('disabled', 'disabled');
   }
 
+  let settings = {
+    "url": $("#urlApi").val()+"relations?rel=products,categories&type=product,category&equalTo="+idSubcategory+"&linkTo=id_subcategory_product&select=id_category,id_product,name_product",
+    "method":"GET",
+    "timeout":0,
+  };
+
+  $.ajax(settings).done(function(response){
+    let limpiar= $(".optProduct");
+    limpiar.each(i=>{
+      $(limpiar[i]).remove();
+    });
+    response.result.forEach(item =>{
+      $('[name="SelectProduct"]').append(`<option class="optProduct" value="`+item.id_category+`_`+item.id_product+`_`+item.name_product+`">`+item.name_product+`</option>`);
+    });
+  });
+}
+function changecategory(event){
+  $(".subcategoryProduct").show();
+  let idCategory = event.target.value.split("_")[0];
+  let categoryName = event.target.value.split("_")[1];
+  if(categoryName === "accesorios"){
+    $('.categoryAccesorios').addClass('d-none');
+    $(".buttonStock").removeAttr("disabled");
+  }else{
+    $('.categoryAccesorios').removeClass('d-none');
+    $(".buttonStock").attr('disabled', 'disabled');
+  }
 
   let settings = {
     "url": $("#urlApi").val()+"subcategories?equalTo="+idCategory+"&linkTo=id_category_subcategory&select=id_subcategory,name_subcategory,title_list_subcategory",
@@ -1943,7 +2014,7 @@ function changecategory(event){
       $(limpiar[i]).remove();
     });
     response.result.forEach(item =>{
-      $('[name="subcategoryProduct"]').append(`<option class="optSubCategory" value="`+item.id_subcategory+`_`+item.title_list_subcategory+`">`+item.name_subcategory+`</option>`);
+      $('[name="subcategoryProduct"]').append(`<option class="optSubCategory" value="`+item.id_subcategory+`_`+item.name_subcategory+`">`+item.name_subcategory+`</option>`);
     });
   });
 }
@@ -1972,6 +2043,55 @@ function changeLinea(event){
       }
     })
   });
+}
+
+function changeTransporte(event, tipo){
+  if(tipo == "Linea"){
+    $(".LineaProduct").show();
+    let trasporte = event.target.value;
+    let settings = {
+      "url": $("#urlLocal").val()+"views/json/"+ trasporte +".json",
+      "method":"GET",
+      "timeout":0,
+    };
+    $.ajax(settings).done(function(response){
+      let limpiar= $(".optLinea");
+      limpiar.each(i=>{
+        $(limpiar[i]).remove();
+      });
+      response.forEach((item,index) =>{
+        if(item.nombre){
+          $('[name="LineaEdit"]').append(`<option class="optLinea" value="`+item._id.v+`_`+item.nombre+`_`+trasporte+`">`+item.nombre+`</option>`);
+          $('[name="LineaProduct"]').append(`<option class="optLinea" value="`+item._id.v+`_`+item.nombre+`_`+trasporte+`">`+item.nombre+`</option>`);
+        }
+      })
+    });
+  }else if(tipo == "Estacion"){
+    $(".EstacionProduct").show();
+    let idEstacion = event.target.value.split("_")[1];
+    let trasporte = event.target.value.split("_")[2];
+    let settings = {
+      "url": $("#urlLocal").val()+"views/json/"+trasporte+".json",
+      "method":"GET",
+      "timeout":0,
+    };
+    $.ajax(settings).done(function(response){
+      response.forEach((item,index) =>{
+        if(item.nombre){
+          if(idEstacion == item.nombre){
+            let limpiar= $(".optEstation");
+              limpiar.each(i=>{
+                $(limpiar[i]).remove();
+              });
+              item.estaciones.forEach(item2 =>{
+                  $('[name="Estacionedit"]').append(`<option class="optEstation" value="`+item2._id.v+`_`+item2.nombre+`">`+item2.nombre+`</option>`);
+                  $('[name="EstacionProduct"]').append(`<option class="optEstation" value="`+item2._id.v+`_`+item2.nombre+`">`+item2.nombre+`</option>`);
+                });
+          }
+        }
+      })
+    });
+  }
 }
 
 function changeProduct(event){
@@ -2788,3 +2908,130 @@ $(document).on("click", ".starsList", function(){
 
   });
 });
+
+function agregarProductTicket(accion){
+  let precioTotalSalida = 0;
+  let envioOrder = 0;
+  let pagoPrev = 0;
+  if(accion == 'pedido'){
+    let category = $("#categoryProductAdd").val().split("_")[1];
+    let subCategory = $("#subCategoryProductAdd").val().split("_")[1];
+    let product = $("#productAdd").val().split("_")[2];
+    let peso = $("#pesoProductAdd").val();
+    let altura = $("#alturaProductAdd").val();
+    let color = $("#colorProductAdd").val().split("_")[1];
+    let talla = $("#tallaProductAdd").val().split("_")[1];
+    let precio = $("#precioProductAdd").val();
+    let precioTotal = parseInt(document.getElementsByClassName("totalOrder_ticket")[0].textContent);
+    // let envio = $("#envioProductAdd").val();
+    let cantidad = $("#cantidadProductAdd").val();
+    let totalSalida = 0;
+    let colorClass = color.replace(/ /g, "_");
+    let tallaClass = talla.replace(/ /g, "_");
+    let productClass = product.replace(/ /g, "_");
+
+    if(category === "Accesorios"){
+      talla = "Sin Talla";
+    }
+    if(category && subCategory && product && peso && altura && color && talla && precio && cantidad){
+      totalSalida = parseInt(precio*cantidad);
+      $(".product_name_order").append(`
+      <tr class="`+colorClass+`_`+tallaClass+`_`+productClass+`">
+        <td>
+          <a href="<?php //echo $path.$pOrder->url_product ?>" class="name_producto">`+product+` (Talla: <span>`+talla+`</span>, Color:<span>`+color+`</span>)</a>  <button title="Eliminar" type="button" class="btn btn-danger rounded-circle mr-2" onclick="eliminarDeTicket('`+colorClass+`_`+tallaClass+`_`+productClass+`')"><i class='fa fa-trash'></i></button>
+          <div class="small text_secondary">
+          <div>Cantidad:<strong><span class="quantityOrder"><?php //echo $count; ?> `+cantidad+` </span></strong></div>
+        </td>
+        <td class="text-right"><div><span class="priceProd">$`+totalSalida+`</span></div></td> 
+      </tr>   
+      `);
+      precioTotalSalida = parseInt(precioTotal + totalSalida);
+    }else{
+      switAlert("error", "Acompleta los datos", null, null);
+    }
+  }else if(accion == 'contacto'){
+    document.getElementsByClassName("telefonoTicket")[0].textContent = "";
+    document.getElementsByClassName("nameTicket")[0].textContent = "";
+    document.getElementsByClassName("estacionTicket")[0].textContent = "";
+    document.getElementsByClassName("fechaTicket")[0].textContent = "";
+    document.getElementsByClassName("horaTicket")[0].textContent = "";
+    let pagoPrevSubmit = parseInt(document.getElementById("pagoPrevProductSubmit").value);
+    console.log(pagoPrevSubmit);
+    if(pagoPrevSubmit <= 0 ){
+      pagoPrev = parseInt($("#pagoPrevProductAdd").val());
+      document.getElementsByClassName("PagoPrev_ticket")[0].textContent = "";
+      $(".PagoPrev_ticket").append(pagoPrev);
+      document.getElementById("pagoPrevProductSubmit").value = pagoPrev;
+    }
+    console.log(pagoPrev);
+    let diaEntrega = $("#diaProductAdd").val();
+    let hora = $("#horaProductAdd").val();
+    let trasporte = $("#transporteProductAdd").val();
+    let linea = $("#lineaProductAdd").val().split("_")[1];
+    let estacion = $("#estacionProductAdd").val().split("_")[1];
+    let name = $("#nameProductAdd").val();
+    let telefono = $("#telefonoProductAdd").val();
+    let fecha = new Date(diaEntrega);
+    let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    let mesNumero = fecha.getMonth();
+    let mesNombre = meses[mesNumero];
+    let dia = fecha.getDate();
+    let partesHora = hora.split(":");
+    let horaNumerica = parseInt(partesHora[0]);
+    let minutos = partesHora[1];
+    let ampm = horaNumerica >= 12 ? 'PM' : 'AM';
+    let hora12h = horaNumerica % 12 || 12;
+    $(".telefonoTicket").append(telefono);
+    $(".nameTicket").append(name);
+    $(".estacionTicket").append(linea + " - " + estacion);
+    $(".fechaTicket").append(dia+'-'+mesNombre);
+    $(".horaTicket").append(hora12h + ":" + minutos + " " + ampm);
+    let envioSubmit = parseInt(document.getElementById("envioSubmit").value);
+    if(envioSubmit <= 0 ){
+      if(linea == "Línea B" || linea == "Línea 5" || linea == "Línea 2"){
+        envioOrder = 0;
+      }else if (trasporte == "Mexibus" || trasporte == "Suburbano"){
+        envioOrder = 100;
+      }else{
+        envioOrder = 50;
+      }
+      document.getElementById("envioSubmit").value = envioOrder;
+      document.getElementsByClassName("envioSubmit")[0].textContent = "";
+      $(".envioSubmit").append(envioOrder);
+    }
+    precioTotalSalida = parseInt(document.getElementsByClassName("totalOrder_ticket")[0].textContent); 
+  }
+  precioTotalSalida = precioTotalSalida + envioOrder - pagoPrev;
+  document.getElementsByClassName("totalOrder_ticket")[0].textContent = "";
+  $(".totalOrder_ticket").append(precioTotalSalida);
+}
+
+function eliminarDeTicket(modulo){
+  var trElement = document.querySelector('.' + modulo);
+  let precioTotalSalida = parseInt( document.getElementsByClassName("totalOrder_ticket")[0].textContent);
+  let envioOrder = parseInt($("#envioSubmit").val());
+  let pagoPrev = parseInt($(".PagoPrev_ticket").text());
+  console.log(pagoPrev);
+  let precioEliminado = 0;
+  if (trElement) {
+    let priceElement = trElement.querySelector('.priceProd');
+    let precioTexto = priceElement.textContent.trim();
+    precioEliminado = parseFloat(precioTexto.replace('$', '').trim());    
+    trElement.remove();
+  } else {
+    switAlert("error", "No se eimino", null, null);
+  }
+  console.log(precioEliminado);
+  console.log(pagoPrev);
+  console.log(envioOrder);
+  console.log(precioTotalSalida);
+  precioTotalSalida = precioTotalSalida + envioOrder - pagoPrev - precioEliminado;
+  console.log(precioTotalSalida);
+  document.getElementsByClassName("totalOrder_ticket")[0].textContent = "";
+  $(".totalOrder_ticket").append(precioTotalSalida);
+}
+
+function resetCampo(tipo){
+  if(tipo == "estacion"){document.getElementById("envioSubmit").value = 0;}
+  if(tipo == "pagoPrev"){document.getElementById("pagoPrevProductSubmit").value = 0;}
+}

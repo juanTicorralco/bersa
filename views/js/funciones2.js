@@ -67,13 +67,13 @@ function switAlert(type, text, url, icon, time) {
       Swal.fire({
         allowOutsideClick: false,
         title: text,
-        width: 600,
+        width: 1000,
         padding: "3em",
         color: "#fff",
-        background: "#fff url(img/users/default/fondo.gif)",
+        background: "#fff no-repeat center top url(img/users/default/fondo.png)",
         backdrop: `
             rgba(0,0,123,0.4)
-            url("img/users/default/we4.gif")
+            url("img/users/default/we4.png")
             center top
             no-repeat
         `,

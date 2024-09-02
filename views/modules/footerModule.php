@@ -9,11 +9,11 @@
                 <div class="widget_content">
                     <p>Whatsapp 24/7</p>
                     <h3>55-64-11-50-39</h3>
-                    <p>Ciudad de México, CDMX <br><a href="mailto:seture.web@gmail.com">altitex.j@gmail.com</a></p>
+                    <p>Ciudad de México, CDMX <br><a href="mailto:bersani.mx@gmail.com">bersani.mx@gmail.com</a></p>
                     <ul class="ps-list--social">
-                        <li><a class="facebook" href="https://www.facebook.com/Seture-109105768782094/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a class="google-plus" href="https://youtube.com/@seture" target="_blank"><i class="fab fa-youtube"></i></a></li>
-                        <li><a class="instagram" href="https://instagram.com/seturee?igshid=ZDdkNTZiNTM=" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li><a class="facebook" href="https://www.facebook.com/Bersani.shop/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a class="google-plus" href="https://youtube.com/@BERSANI-shop" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                        <li><a class="instagram" href="https://instagram.com/bersani.shop" target="_blank"><i class="fab fa-instagram"></i></a></li>
                     </ul>
                 </div>
             </aside>

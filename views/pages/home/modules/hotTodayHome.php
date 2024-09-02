@@ -7,25 +7,28 @@ $method = "GET";
 $field = array();
 $header = array();
 $promotionToday = CurlController::request($url, $method, $field, $header)->result;
-foreach ($promotionToday as $key => $value) {
-    /* we ask if the product bring offer and stock */
-    if ($value->offer_product == null || $value->stock_product == 0  || $value->offer_product == "") {
-        unset($promotionToday[$key]);
-    }
-    /* We ask if the offer date has not expired */
-    if ($value->offer_product != null) {
-        if ($today > json_decode($value->offer_product, true)[2]) {
+if(!is_array($promotionToday) || count($promotionToday) < 0){
+    $promotionToday = array();
+}
+
+if(count($promotionToday) > 1){
+    foreach ($promotionToday as $key => $value) {
+        /* we ask if the product bring offer and stock */
+        if ($value->offer_product == null || $value->stock_product == 0  || $value->offer_product == "") {
             unset($promotionToday[$key]);
         }
+        /* We ask if the offer date has not expired */
+        if ($value->offer_product != null) {
+            if ($today > json_decode($value->offer_product, true)[2]) {
+                unset($promotionToday[$key]);
+            }
+        }
     }
-}
-/* if more than 10 products come to be displayed */
-if (count($promotionToday) > 10) {
-    $random = rand(0, (count($promotionToday) - 10));
-    $promotionToday = array_slice($promotionToday, $random, 10);
-}
-// echo '<pre>'; print_r($bestProduct); echo '</pre>'; 
-                // return;
+    /* if more than 10 products come to be displayed */
+    if (count($promotionToday) > 10) {
+        $random = rand(0, (count($promotionToday) - 10));
+        $promotionToday = array_slice($promotionToday, $random, 10);
+    }
 ?>
 <div class="ps-deal-hot">
     <div class="container">
@@ -306,3 +309,4 @@ if (count($promotionToday) > 10) {
         </div>
     </div>
 </div><!-- End Home Deal Hot -->
+<?php }?>

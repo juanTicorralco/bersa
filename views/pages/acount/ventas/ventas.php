@@ -77,8 +77,6 @@ if (!isset($_SESSION['user'])) {
                 $select="price_order,cost_order,name_product,date_create_order";
                 $url= CurlController::api()."relations?rel=orders,products&type=order,product&linkTo=status_order&equalTo=Finalizado&select=".$select."&orderBy=date_create_order&orderMode=ASC"."&token=".$_SESSION["user"]->token_user;
                 $sales= CurlController::request($url, $method, $header, $filds)->result;
-                // echo '<pre>'; print_r($sales); echo '</pre>'; 
-                //             return;
             }
         }
         if($_SESSION['user']->method_user == 'administer'){

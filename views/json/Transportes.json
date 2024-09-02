@@ -1,0 +1,7 @@
+[
+    {
+        "tipoTrasporte" : [
+            "Metro", "Metrobus", "Tren Ligero", "Mexibus", "Suburbano"
+        ]
+    }
+]

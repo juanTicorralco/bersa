@@ -64,9 +64,10 @@ $bestcategory = CurlController::request($url, $method, $field, $header)->result;
                 $method = "GET";
                 $field = array();
                 $header = array();
-                $bestProduct = CurlController::request($url, $method, $field, $header)->result;
-                // echo '<pre>'; print_r($bestProduct); echo '</pre>'; 
-                // return;
+                $bestProduct = CurlController::request($url, $method, $field, $header);
+                if(!is_array($bestProduct) || count($bestProduct) < 0){
+                    $bestProduct = array();
+                }
                 ?>
                 <div class="ps-block__slider">
                     <div class="ps-carousel--product-box owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="500" data-owl-mousedrag="off">

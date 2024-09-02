@@ -5,6 +5,9 @@ $method = "GET";
 $field = array();
 $header = array();
 $productBanner = CurlController::request($url, $method, $field, $header)->result;
+if(!is_array($productBanner) || count($productBanner) < 0){
+    $productBanner = array();
+}
 ?>
 <div class="container-fluid preloadTrue">
     <div class="ph-item border-0">

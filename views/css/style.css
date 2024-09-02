@@ -13245,13 +13245,13 @@ textarea.form-control {
     }
 }
 
-.ps-section--shopping {
+/* .ps-section--shopping {
     padding: 50px 0;
-}
+} */
 
 .ps-section--shopping .ps-section__header {
     text-align: center;
-    padding-bottom: 50px;
+    /* padding-bottom: 50px; */
 }
 
 .ps-section--shopping .ps-section__header h1 {
@@ -14835,14 +14835,15 @@ textarea.form-control {
     font-size: 20px;
 }
 
-.ps-vendor-dashboard .ps-section__header {
+/* .ps-vendor-dashboard .ps-section__header {
     padding: 70px 0;
-}
+} */
 
 .ps-vendor-dashboard .ps-section__header h3 {
-    font-size: 48px;
-    font-weight: 600;
+    /* font-size: 48px;
+    font-weight: 600; */
     margin-bottom: 30px;
+    text-align: center;
 }
 
 .ps-vendor-dashboard .ps-section__header p {

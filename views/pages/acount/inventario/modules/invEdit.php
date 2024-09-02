@@ -7,8 +7,6 @@
         $headers = array();
         $editProduct = CurlController::request($url,$method,$fields,$headers)->result;
     }
-    // echo '<pre>'; print_r($editProduct); echo '</pre>'; 
-    // return;
 ?>
 <?php if($editProduct == "n"): ?>
     <h4 class="text-center">No existe este producto en tu inventario</h4><br>

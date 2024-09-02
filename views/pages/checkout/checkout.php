@@ -21,46 +21,29 @@ $totalPriceSC2= 0;
 Breadcrumb
 ======================================-->  
 	
-    <div class="ps-breadcrumb">
-
-        <div class="container">
-
-            <ul class="breadcrumb">
-
-                <li><a href="/">Home</a></li>
-
-                <!-- <li><a href="<?php //echo $path?>shopingBag">Carrito de compras</a></li> -->
-
-                <li>Pagar</li>
-
-            </ul>
-
-        </div>
-
+<div class="ps-breadcrumb">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <!-- <li><a href="<?php //echo $path?>shopingBag">Carrito de compras</a></li> -->
+            <li>Pagar</li>
+        </ul>
     </div>
+</div>
 <!--=====================================
 Checkout
 ======================================--> 
     <div class="ps-checkout ps-section--shopping">
-
         <div class="container">
-
             <div class="ps-section__header">
-
                 <h1>Checkout</h1>
-
             </div>
-
             <div class="ps-section__content">
-
                 <form class="ps-form--checkout needs-validation" novalidate method="post" onsubmit="return checkout()">
-
-                <input type="hidden" id="idUser" value="<?php echo $_SESSION["user"]->id_user; ?>" >
-                <input type="hidden" id="urlApi" value="<?php echo CurlController::api() ?>" >
-                <input type="hidden" id="url" value="<?php echo $path ?>" >
-
+                    <input type="hidden" id="idUser" value="<?php echo $_SESSION["user"]->id_user; ?>" >
+                    <input type="hidden" id="urlApi" value="<?php echo CurlController::api() ?>" >
+                    <input type="hidden" id="url" value="<?php echo $path ?>" >
                     <div class="row">
-
                         <div class="col-xl-7 col-lg-8 col-sm-12">
 
                             <div class="ps-form__billing-info">
@@ -330,14 +313,9 @@ Checkout
                                     </div>
 
                                 </div>
-
-
                             </div>
-
                         </div>
-
                         <!-- Notes order -->
-
                         <div class="col-xl-5 col-lg-4 col-sm-12">
 
                             <div class="ps-form__total">
@@ -703,17 +681,11 @@ Checkout
                             </div>
 
                         </div>
-
                     </div>
-
                 </form>
-
             </div>
-
         </div>
-
     </div>
-
 <?php
     //si se manda por get de payu
     if(isset($_REQUEST['transactionState']) && $_REQUEST['transactionState']==4  && isset($_REQUEST['reference_pol'])){
@@ -721,8 +693,8 @@ Checkout
         endCheckout( $_REQUEST['reference_pol']);
     }
 
-     //si se manda por POST de payu
-     if(isset($_REQUEST['state_pol']) && $_REQUEST['state_pol']==4  && isset($_REQUEST['reference_pol'])){
+    //si se manda por POST de payu
+    if(isset($_REQUEST['state_pol']) && $_REQUEST['state_pol']==4  && isset($_REQUEST['reference_pol'])){
         $idPaiment= $_REQUEST['reference_pol'];
         endCheckout( $_REQUEST['reference_pol']);
     }

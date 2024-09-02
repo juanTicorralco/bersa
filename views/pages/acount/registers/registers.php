@@ -81,11 +81,14 @@ My Account Content
                 </ul>
                 <?php if(isset($_GET["Editar"]) && is_numeric($_GET["Editar"])):?>
                     <?php  include_once("modules/editRegister.php"); ?>
+                <?php elseif(isset($_GET["Crear"]) && $_GET["Crear"] == "Crear"):?>
+                    <?php  include_once("modules/newRegister.php"); ?>
                 <?php else:?>
                     <!--=====================================
                     Wishlist
                     ======================================-->
-                    <button class="btn btn-dark btn-lg m-3" data-toggle="modal" data-target="#registerNew">Nuevo</button>
+                    <!-- <button class="btn btn-dark btn-lg m-3" data-toggle="modal" data-target="#registerNew">Nuevo</button> -->
+                    <a title="Crear" href="http://bersani.com/acount&registers?Crear=Crear" type="button" class="btn btn-dark btn-lg m-3">Nuevo</a>
                     <a href="http://bersani.com/acount&registers?entregados" type="button" class="btn btn-success btn-lg m-3">Entregados</a>
                     <a href="http://bersani.com/acount&registers?cancelados" type="button" class="btn btn-danger btn-lg m-3">Cancelados</a>
                     <div class="table-responsive ">

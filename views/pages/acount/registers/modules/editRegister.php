@@ -7,8 +7,6 @@
         $headers = array();
         $editProduct = CurlController::request($url,$method,$fields,$headers)->result[0];
     }
-    //   echo '<pre>'; print_r($editProduct); echo '</pre>'; 
-    //                                      return;
 ?>
 <?php if($editProduct == "n"): ?>
     <h4 class="text-center">No existe este producto en tu inventario</h4><br>
@@ -329,7 +327,6 @@
                     </div>
                 </div>
                 <div class="form-group submtit">
-        
             </div>
             <div class="modal-footer">
                 <div class="form-group submit">

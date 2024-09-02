@@ -28,10 +28,10 @@ if (isset($_SESSION["user"])) {
             ======================================-->
             <div class="headerLeft">
                 <ul>
-                    <li><a href="https://www.facebook.com/Seture-109105768782094/" target="_blank"><i class="fab fa-facebook-f mr-4"></i></a></li>
-                    <li><a href="https://instagram.com/seturee?igshid=ZDdkNTZiNTM=" target="_blank"><i class="fab fa-instagram mr-4"></i></a></li>
+                    <li><a href="https://www.facebook.com/Bersani.shop/" target="_blank"><i class="fab fa-facebook-f mr-4"></i></a></li>
+                    <li><a href="https://youtube.com/@BERSANI-shop" target="_blank"><i class="fab fa-instagram mr-4"></i></a></li>
                     <!-- <li><a href="#" target="_blank"><i class="fab fa-twitter mr-4"></i></a></li> -->
-                    <li><a href="https://youtube.com/@seture" target="_blank"><i class="fab fa-youtube mr-4"></i></a></li>
+                    <li><a href="https://instagram.com/bersani.shop" target="_blank"><i class="fab fa-youtube mr-4"></i></a></li>
                 </ul>
             </div>
             <!--=====================================
@@ -121,10 +121,10 @@ if (isset($_SESSION["user"])) {
             ======================================-->
 
             <div class="header__content-center">
-                    <form class="ps-form--quick-search">
-                        <input class="form-control inputSearch" type="text" placeholder="Buscar por...">
-                        <button type="button" class="btnSearch" path="<?php echo $path; ?>">Buscar</button>
-                    </form>
+                <form class="ps-form--quick-search">
+                    <input class="form-control inputSearch" type="text" placeholder="Buscar por...">
+                    <button type="button" class="btnSearch" path="<?php echo $path; ?>">Buscar</button>
+                </form>
             </div>
             <div class="header__content-right">
                 <div class="header__actions">
@@ -307,7 +307,7 @@ if (isset($_SESSION["user"])) {
                                 <?php endif; ?>
                             </div>
                             <div class="ps-block__right">
-                                <a href="<?php echo $path; if ($_SESSION['user']->method_user == 'direct')echo 'acount&wishAcount';if ($_SESSION['user']->method_user == 'administer')echo 'acount&list-vendor';if ($_SESSION['user']->method_user == 'globalAdminister')echo 'acount&my-store';?>"><?php echo $_SESSION['user']->name_user; ?></a>
+                                <a href="<?php echo $path; if ($_SESSION['user']->method_user == 'direct')echo 'acount&wishAcount';if ($_SESSION['user']->method_user == 'administer')echo 'acount&list-vendor';if ($_SESSION['user']->method_user == 'globalAdminister')echo 'acount&registers';?>"><?php echo $_SESSION['user']->name_user; ?></a>
                                 <a href="<?php echo $path ?>acount&logout">Salir</a>
                             </div>
                         </div>
